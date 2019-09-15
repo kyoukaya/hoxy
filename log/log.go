@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"hoxy/utils"
+	"io"
 	stdLog "log"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/logrusorgru/aurora"
@@ -29,8 +31,17 @@ const (
 // InitLogger sets up the default logger.
 func InitLogger(stdOut, fileOut bool, filePath string) {
 	Verbose = utils.BoolFlags("hoxy-verbose")
+
+	// Support for colored stdout output on windows.
+	var output io.Writer
+	if runtime.GOOS == "windows" {
+		output = colorable.NewColorableStdout()
+	} else {
+		output = os.Stdout
+	}
+
 	if stdOut {
-		stdOutLogger = stdLog.New(colorable.NewColorableStdout(), defaultPrefix, defaultFlags)
+		stdOutLogger = stdLog.New(output, defaultPrefix, defaultFlags)
 	}
 
 	if fileOut {
