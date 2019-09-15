@@ -1,3 +1,5 @@
+// Packet Logger - Logs all raw packet information
+
 package packetlogger
 
 import (

@@ -1,3 +1,6 @@
+// Construction Info - Prints to console what gun a user has crafted immediately after
+// they have sent a construction order.
+
 package constructioninfo
 
 import (
@@ -46,7 +49,7 @@ func (*constructInfo) handleMulti(op string, pkt interface{}, userCtx *proxy.Use
 	for _, v := range data.GunIds {
 		id, err := strconv.Atoi(v.ID)
 		if err != nil {
-			return pkt, fmt.Errorf("Error while parsing %#v", v)
+			return pkt, fmt.Errorf("construction info: error while parsing %#v", v)
 		}
 		gunNames = append(gunNames, dollinfo.Get(id).Name)
 	}
@@ -54,7 +57,7 @@ func (*constructInfo) handleMulti(op string, pkt interface{}, userCtx *proxy.Use
 	if dispatchCtx.RequestUnmarshalErr == nil {
 		data, ok := dispatchCtx.RequestPkt.(*defs.CGunDevelopMultiGun)
 		if !ok {
-			return pkt, fmt.Errorf("construction Info: reqCtx contains unmarshalled packet")
+			return pkt, fmt.Errorf("construction info: reqCtx contains unmarshalled packet")
 		}
 		rscUsed = fmt.Sprintf("[%d/%d/%d/%d] ", data.Mp, data.Ammo, data.Mre, data.Part)
 	}
