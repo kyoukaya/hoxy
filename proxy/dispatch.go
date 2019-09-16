@@ -83,7 +83,7 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 			log.Warnf("No definitions found for %s", e.op)
 		case MarshalMismatchErr:
 			e := unmarshalErr.(MarshalMismatchErr)
-			log.Warnf("Marshal->Unmarshal mistmatch for %s", e.op)
+			log.Warnf("Marshal->Unmarshal mismatch for %s", e.op)
 		default:
 			log.Warnln(unmarshalErr)
 			return req, res

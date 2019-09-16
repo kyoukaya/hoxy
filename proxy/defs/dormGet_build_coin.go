@@ -7,5 +7,5 @@ type CDormGet_build_coin struct {
 }
 
 type SDormGet_build_coin struct {
-	BuildCoin string `json:"build_coin"`
+	BuildCoin interface{} `json:"build_coin"` // str or int
 }
