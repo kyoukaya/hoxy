@@ -1,5 +1,7 @@
 package defs
 
+import "hoxy/proxy/defs/types"
+
 // Mission/startMission
 type CMissionStartMission struct {
 	MissionID int `json:"mission_id"`
@@ -22,8 +24,8 @@ type SMissionStartMission struct {
 		EnemyHpPercent   string        `json:"enemy_hp_percent"`
 		EnemyInstanceID  string        `json:"enemy_instance_id"`
 		EnemyBirthTurn   string        `json:"enemy_birth_turn"`
-		EnemyAi          interface{}   `json:"enemy_ai"`      // can be string or int
-		EnemyAiPara      interface{}   `json:"enemy_ai_para"` // can be string or int
+		EnemyAi          types.Int     `json:"enemy_ai"`
+		EnemyAiPara      types.Int     `json:"enemy_ai_para"`
 		Belong           string        `json:"belong"`
 		IfRandom         string        `json:"if_random"`
 		Seed             int           `json:"seed"`

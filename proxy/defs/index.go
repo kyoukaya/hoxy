@@ -1,5 +1,7 @@
 package defs
 
+import "hoxy/proxy/defs/types"
+
 // CIndexIndex Client's request for Index/index
 type CIndexIndex struct {
 	Time int `json:"time"`
@@ -424,14 +426,14 @@ type SIndexIndex struct {
 		Num     string `json:"num"`
 	} `json:"medal_with_user_info"`
 	KalinaWithUserInfo struct {
-		UserID       string `json:"user_id"`
-		ClickNum     int    `json:"click_num"`
-		ClickTime    int    `json:"click_time"`
-		Level        string `json:"level"`
-		Favor        string `json:"favor"`
-		LastFavor    string `json:"last_favor"`
-		Skin         string `json:"skin"`
-		SendMailTime string `json:"send_mail_time"`
+		UserID       string    `json:"user_id"`
+		ClickNum     types.Int `json:"click_num"`
+		ClickTime    int       `json:"click_time"`
+		Level        string    `json:"level"`
+		Favor        string    `json:"favor"`
+		LastFavor    string    `json:"last_favor"`
+		Skin         string    `json:"skin"`
+		SendMailTime string    `json:"send_mail_time"`
 	} `json:"kalina_with_user_info"`
 	ShareWithUserInfo struct {
 		LastTime int `json:"last_time"`

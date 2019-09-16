@@ -1,69 +1,71 @@
 package defs
 
+import "hoxy/proxy/defs/types"
+
 // CIndexQuest has no request body
 
 // SIndexQuest Server's Index/Quest response
 type SIndexQuest struct {
 	Daily struct {
-		DevelopGun          int         `json:"develop_gun"`
-		Operation           interface{} `json:"operation"` // str or int
-		ID                  string      `json:"id"`
-		UserID              string      `json:"user_id"`
-		EndTime             string      `json:"end_time"`
-		Mission             string      `json:"mission"`
-		Eat                 interface{} `json:"eat"` // str or int
-		Fix                 string      `json:"fix"`
-		Upgrade             string      `json:"upgrade"`
-		CoinMission         string      `json:"coin_mission"`
-		DevelopEquip        string      `json:"develop_equip"`
-		WinRobot            string      `json:"win_robot"`
-		WinPerson           string      `json:"win_person"`
-		WinBoss             string      `json:"win_boss"`
-		WinArmorrobot       string      `json:"win_armorrobot"`
-		WinArmorperson      string      `json:"win_armorperson"`
-		EatEquip            string      `json:"eat_equip"`
-		FromFriendBuildCoin string      `json:"from_friend_build_coin"`
-		BorrowFriendTeam    string      `json:"borrow_friend_team"`
-		SquadDataAnalyse    string      `json:"squad_data_analyse"`
+		Operation           types.Int `json:"operation"`
+		Fix                 types.Int `json:"fix"`
+		Mission             types.Int `json:"mission,string"`
+		DevelopGun          types.Int `json:"develop_gun"`
+		ID                  types.Int `json:"id"`
+		UserID              types.Int `json:"user_id"`
+		EndTime             types.Int `json:"end_time"`
+		Eat                 types.Int `json:"eat"`
+		Upgrade             types.Int `json:"upgrade"`
+		CoinMission         types.Int `json:"coin_mission"`
+		DevelopEquip        types.Int `json:"develop_equip"`
+		WinRobot            types.Int `json:"win_robot"`
+		WinPerson           types.Int `json:"win_person"`
+		WinBoss             types.Int `json:"win_boss"`
+		WinArmorrobot       types.Int `json:"win_armorrobot"`
+		WinArmorperson      types.Int `json:"win_armorperson"`
+		EatEquip            types.Int `json:"eat_equip"`
+		FromFriendBuildCoin types.Int `json:"from_friend_build_coin"`
+		BorrowFriendTeam    types.Int `json:"borrow_friend_team"`
+		SquadDataAnalyse    types.Int `json:"squad_data_analyse"`
 	} `json:"daily"`
 	Weekly struct {
-		ID                  string      `json:"id"`
-		UserID              string      `json:"user_id"`
-		EndTime             int         `json:"end_time"`
-		Fix                 int         `json:"fix"`
-		WinRobot            int         `json:"win_robot"`
-		WinPerson           int         `json:"win_person"`
-		WinBoss             int         `json:"win_boss"`
-		WinArmorrobot       int         `json:"win_armorrobot"`
-		WinArmorperson      int         `json:"win_armorperson"`
-		Operation           interface{} `json:"operation"` // str or int
-		SWin                int         `json:"s_win"`
-		Eat                 interface{} `json:"eat"` // str or int
-		DevelopGun          string      `json:"develop_gun"`
-		Upgrade             int         `json:"upgrade"`
-		CoinMission         int         `json:"coin_mission"`
-		DevelopEquip        int         `json:"develop_equip"`
-		SpecialDevelopGun   int         `json:"special_develop_gun"`
-		AdjustEquip         int         `json:"adjust_equip"`
-		EatEquip            int         `json:"eat_equip"`
-		SpecialDevelopEquip int         `json:"special_develop_equip"`
-		AdjustFairy         int         `json:"adjust_fairy"`
-		EatFairy            int         `json:"eat_fairy"`
-		SquadDataAnalyse    int         `json:"squad_data_analyse"`
-		SquadEatChip        int         `json:"squad_eat_chip"`
+		ID                  types.Int `json:"id"`
+		UserID              types.Int `json:"user_id"`
+		EndTime             types.Int `json:"end_time"`
+		Fix                 types.Int `json:"fix"`
+		WinRobot            types.Int `json:"win_robot"`
+		WinPerson           types.Int `json:"win_person"`
+		WinBoss             types.Int `json:"win_boss"`
+		WinArmorrobot       types.Int `json:"win_armorrobot"`
+		WinArmorperson      types.Int `json:"win_armorperson"`
+		Operation           types.Int `json:"operation"`
+		SWin                types.Int `json:"s_win"`
+		Eat                 types.Int `json:"eat"`
+		DevelopGun          types.Int `json:"develop_gun"`
+		Upgrade             types.Int `json:"upgrade"`
+		CoinMission         types.Int `json:"coin_mission"`
+		DevelopEquip        types.Int `json:"develop_equip"`
+		SpecialDevelopGun   types.Int `json:"special_develop_gun"`
+		AdjustEquip         types.Int `json:"adjust_equip"`
+		EatEquip            types.Int `json:"eat_equip"`
+		SpecialDevelopEquip types.Int `json:"special_develop_equip"`
+		AdjustFairy         types.Int `json:"adjust_fairy"`
+		EatFairy            types.Int `json:"eat_fairy"`
+		SquadDataAnalyse    types.Int `json:"squad_data_analyse"`
+		SquadEatChip        types.Int `json:"squad_eat_chip"`
 	} `json:"weekly"`
 	Career struct {
-		DevelopGun          int    `json:"develop_gun"`
-		AutoMission1        string `json:"auto_mission_1"`
-		Gun5IntoTeam        string `json:"gun5_into_team"`
-		CombineGun          string `json:"combine_gun"`
-		GashaCount          string `json:"gasha_count"`
-		OpenGift            string `json:"open_gift"`
-		DormChange          string `json:"dorm_change"`
-		FriendVisit         string `json:"friend_visit"`
-		EatGun              string `json:"eat_gun"`
-		SunFriendTeamInto   string `json:"sun_friend_team_into"`
-		NightFriendTeamInto string `json:"night_friend_team_into"`
+		DevelopGun          types.Int `json:"develop_gun"`
+		AutoMission1        types.Int `json:"auto_mission_1"`
+		Gun5IntoTeam        types.Int `json:"gun5_into_team"`
+		CombineGun          types.Int `json:"combine_gun"`
+		GashaCount          types.Int `json:"gasha_count"`
+		OpenGift            types.Int `json:"open_gift"`
+		DormChange          types.Int `json:"dorm_change"`
+		FriendVisit         types.Int `json:"friend_visit"`
+		EatGun              types.Int `json:"eat_gun"`
+		SunFriendTeamInto   types.Int `json:"sun_friend_team_into"`
+		NightFriendTeamInto types.Int `json:"night_friend_team_into"`
 	} `json:"career"`
 	StaticCareerQuest []struct {
 		ID           string `json:"id"`

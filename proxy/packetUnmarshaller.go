@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"hoxy/log"
 	"reflect"
 	"strings"
 	"unicode"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 // Returns the operation string of a properly named def.
@@ -108,14 +111,18 @@ func UnMarshal(op string, data []byte) (interface{}, error) {
 
 	// compare UnMarshaled->json data with original data
 	if err == nil {
-		remarshal, err := marFunc(op, ret)
+		var remarshal []byte
+		remarshal, err = marFunc(op, ret)
 		if err != nil {
 			return ret, err
 		}
 		// TODO: maps in go aren't ordered so map[string]interfaces typically cause
-		// mistmatch warnings. Probably not much we can do besides writing a new json
+		// mismatch warnings. Probably not much we can do besides writing a new json
 		// library.
 		if !bytes.Equal(data, remarshal) {
+			dmp := diffmatchpatch.New()
+			diffs := dmp.DiffMain(string(data), string(remarshal), false)
+			log.Warnln(dmp.DiffPrettyText(diffs))
 			err = MarshalMismatchErr{op, data, remarshal}
 		}
 	}

@@ -44,6 +44,5 @@ Definitions are discovered, not reversed from the game client, so definitions ma
 - Config file.
 - Fix the constant `MarshalMismatchErr`s. Might have to modify the standard json library or use a custom one to implement ordered maps. Conditional JSON fields may need specific custom marshal/unmarshal procedures. 
 - Support other game servers. This is limited by the fact that I don't have clients for any server other than the global server.
-- Find a better way of handling int/string ambiguity in a packet. The server may send a string encoded version of an integer in lieu of an integer literal sometimes, this is currently worked around in packet definitions by marshalling the data into an empty interface.
 - Support caching of update data. The game updates off AWS using a https connection, capability to generate a unique CA cert and MITM https connections is already written in and can be activated with the `-https` flag. Further analysis of update traffic is required.
 - Order hook execution by their priority.

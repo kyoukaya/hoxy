@@ -155,9 +155,7 @@ func (proxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *gopro
 	} else {
 		log.Infof("<<<< [%s]", op)
 		// dispatch packets like SIndex/index which are not encrypted
-		if op == "SIndex/index" {
-			dec = body
-		}
+		dec = body
 	}
 	_, resp = proxy.dispatch(op, dec, ctx)
 

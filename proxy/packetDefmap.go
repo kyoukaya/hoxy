@@ -47,6 +47,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.CMissionTeamMove{},
 		defs.COperationFinishOperation{},
 		defs.COperationStartOperation{},
+		defs.COuthouseEstablish_build_finish{},
 		defs.COuthouseEstablish_build{},
 		defs.SDormGet_build_coin{},
 		defs.SDormKalinaFavor(0),
@@ -77,6 +78,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.SGunFixGuns(0),
 		defs.SGunTeamGun(0),
 		defs.SIndexAttendance{},
+		defs.SIndexDownloadSuccess(0),
 		defs.SIndexGetMailList{},
 		defs.SIndexGetResourceInMail{},
 		defs.SIndexGetUidEnMicaQueue{},
@@ -99,6 +101,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.SMissionTeamMove{},
 		defs.SOperationFinishOperation{},
 		defs.SOperationStartOperation(0),
+		defs.SOuthouseEstablish_build_finish{},
 		defs.SOuthouseEstablish_build{},
 	}
 	ret := make(map[string]reflect.Type)

@@ -1,5 +1,7 @@
 package defs
 
+import "hoxy/proxy/defs/types"
+
 // CIndexHome Client's request for Index/home
 type CIndexHome struct {
 	DataVersion string `json:"data_version"`
@@ -16,10 +18,10 @@ type SIndexHome struct {
 	RecoverPart   int `json:"recover_part"`
 	Gem           int `json:"gem"`
 	AllFavorupGun []struct {
-		GunWithUserID string      `json:"gun_with_user_id"`
-		FavorAfteradd interface{} `json:"favor_afteradd"` // Can be a string or int
+		GunWithUserID string    `json:"gun_with_user_id"`
+		FavorAfteradd types.Int `json:"favor_afteradd"`
 	} `json:"all_favorup_gun"`
-	LastFavorRecoverTime interface{}   `json:"last_favor_recover_time"` // Can be a string or int
+	LastFavorRecoverTime types.Int     `json:"last_favor_recover_time"`
 	RecoverSsoc          int           `json:"recover_ssoc"`
 	LastSsocChangeTime   int           `json:"last_ssoc_change_time"`
 	Kick                 int           `json:"kick"`
