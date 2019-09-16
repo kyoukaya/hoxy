@@ -1,38 +1,50 @@
 package types
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"strconv"
 )
 
 // Int is a custom type for handling ambiguous int or string encoded int data in json.
+// Somtimes ints values are encoded as an empty string too.
 type Int struct {
-	Value   int
-	fromStr bool
+	Value       int
+	FromStr     bool
+	EmptyString bool
 }
 
-func (ioe *Int) UnmarshalJSON(data []byte) error {
+var emptyString = []byte(`""`)
+
+func (ios *Int) UnmarshalJSON(data []byte) error {
 	if data[0] == '"' {
-		ioe.fromStr = true
+		if bytes.Equal(data, emptyString) {
+			ios.EmptyString = true
+			return nil
+		}
+		ios.FromStr = true
 		i, err := strconv.Atoi(string(data[1 : len(data)-1]))
 		if err != nil {
 			return errors.New("types.Int.UnmarshallingJSON: " + err.Error())
 		}
-		ioe.Value = i
+		ios.Value = i
 		return nil
 	}
 
-	err := json.Unmarshal(data, &ioe.Value)
+	err := json.Unmarshal(data, &ios.Value)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ioe *Int) MarshalJSON() ([]byte, error) {
-	ret := strconv.Itoa(ioe.Value)
-	if ioe.fromStr {
+func (ios *Int) MarshalJSON() ([]byte, error) {
+	if ios.EmptyString {
+		return []byte(`""`), nil
+	}
+	ret := strconv.Itoa(ios.Value)
+	if ios.FromStr {
 		ret = `"` + ret + `"`
 	}
 	return []byte(ret), nil
