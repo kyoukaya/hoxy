@@ -202,3 +202,25 @@ func TestSIndexQuest(t *testing.T) {
 	}
 	testMarshalAndCompare(t, op, casted, orig)
 }
+
+func TestSGunDevelopCollectList(t *testing.T) {
+	op := "SGun/developCollectList"
+	orig := loadFile(t, "SGunDevelopCollectList")
+	ret := testUnmarshal(t, op, orig)
+	casted, ok := ret.(*defs.SGunDevelopCollectList)
+	if !ok {
+		t.Error(casted, ok)
+	}
+	testMarshalAndCompare(t, op, casted, orig)
+}
+
+func TestSGunDevelopLog(t *testing.T) {
+	op := "SGun/developLog"
+	orig := loadFile(t, "SGunDevelopLog")
+	ret := testUnmarshal(t, op, orig)
+	casted, ok := ret.(*defs.SGunDevelopLog)
+	if !ok {
+		t.Error(casted, ok)
+	}
+	testMarshalAndCompare(t, op, casted, orig)
+}

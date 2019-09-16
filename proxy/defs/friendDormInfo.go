@@ -20,12 +20,12 @@ type SFriendDormInfo struct {
 			Mod   string `json:"mod"`
 			Ai    string `json:"ai"`
 		} `json:"adjutant"`
-		FUserid      int         `json:"f_userid"`
-		Name         string      `json:"name"`
-		Lv           string      `json:"lv"`
-		HeadpicID    types.Int   `json:"headpic_id"`
-		HomepageTime int         `json:"homepage_time"`
-		Comment      interface{} `json:"comment"` // string or null
+		FUserid      int       `json:"f_userid"`
+		Name         string    `json:"name"`
+		Lv           string    `json:"lv"`
+		HeadpicID    types.Int `json:"headpic_id"`
+		HomepageTime int       `json:"homepage_time"`
+		Comment      types.Str `json:"comment"`
 	} `json:"in_mydorm_list"`
 	MyVisitList          []interface{} `json:"my_visit_list"`
 	BuildCoinFlag        types.Int     `json:"build_coin_flag"`
