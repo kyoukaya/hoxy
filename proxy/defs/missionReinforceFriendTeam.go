@@ -8,6 +8,7 @@ type CMissionReinforceFriendTeam struct {
 	FriendGunids []int `json:"friend_gunids"`
 }
 
+// TODO: Fix SMission/reinforceFriendTeam
 // SMission/reinforceFriendTeam
 type SMissionReinforceFriendTeam struct {
 	Guns            interface{} `json:"guns"`

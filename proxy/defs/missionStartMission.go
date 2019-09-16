@@ -17,7 +17,8 @@ type SMissionStartMission struct {
 	BuildingInfo []interface{} `json:"building_info"`
 	SquadInfo    []interface{} `json:"squad_info"`
 	Ap           int           `json:"ap"`
-	SpotActInfo  []struct {
+	// Can throw marshal mismatch errors because it randomly changes ordering sometimes.
+	SpotActInfo []struct {
 		SpotID           string        `json:"spot_id"`
 		EnemyTeamID      string        `json:"enemy_team_id"`
 		BossHp           string        `json:"boss_hp"`

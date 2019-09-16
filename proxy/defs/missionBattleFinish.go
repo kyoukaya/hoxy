@@ -1,5 +1,7 @@
 package defs
 
+import "github.com/iancoleman/orderedmap"
+
 // TODO: document what all these cryptic fields mean.
 
 // Mission/battleFinish
@@ -46,9 +48,14 @@ type CMissionBattleFinish struct {
 	} `json:"1000"`
 	Num1001 struct {
 	} `json:"1001"`
-	Num1002      interface{} `json:"1002"`
-	Num1003      interface{} `json:"1003"`
-	Num1005      interface{} `json:"1005"`
+	// Value is an ordered map like so, [1,2,3,4,5] are gun_with_user_id
+	// {"gun_with_user_id":{"47":01},"gun_with_user_id":{"47":10}
+	// "gun_with_user_id":{"47":0},"gun_with_user_id":{"47":0},"gun_with_user_id":{"47":0}}
+	Num1002 *orderedmap.OrderedMap `json:"1002"`
+	// Seems to be a map of a fairy id to some unknown object
+	// {"fairy_id":{"9":0,"68":0}}
+	Num1003      *orderedmap.OrderedMap `json:"1003"`
+	Num1005      interface{}            `json:"1005"`
 	BattleDamage struct {
 	} `json:"battle_damage"`
 }
@@ -63,7 +70,7 @@ type SMissionBattleFinish struct {
 		GunWithUserID string `json:"gun_with_user_id"`
 		Exp           string `json:"exp"`
 	} `json:"gun_exp"`
-	FairyExp               int           `json:"fairy_exp"`
+	FairyExp               *int          `json:"fairy_exp,omitempty"`
 	GunLife                []interface{} `json:"gun_life"`
 	SquadExp               []interface{} `json:"squad_exp"`
 	BattleRank             string        `json:"battle_rank"`
