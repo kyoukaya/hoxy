@@ -35,8 +35,8 @@ Definitions are discovered, not reversed from the game client, so definitions ma
 ## Bugs
 
 `MarshalMismatchErr` is returned by the packet unmarshaller frequently due to a few reasons.
-- Go maps are not ordered.
-- JSON fields may appear only when they are being used.
+- Go maps are not ordered. Fixed in the interim by using a generic ordered map[string]interface{}.
+- JSON fields may appear only when they are being used. Possibly fixed by `,omitempty` struct tags.
 
 ## TODO
 
