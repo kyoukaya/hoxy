@@ -1,5 +1,7 @@
 package defs
 
+import "github.com/iancoleman/orderedmap"
+
 // CMission/reinforceFriendTeam
 type CMissionReinforceFriendTeam struct {
 	SpotID       int   `json:"spot_id"`
@@ -11,8 +13,8 @@ type CMissionReinforceFriendTeam struct {
 // TODO: Fix SMission/reinforceFriendTeam
 // SMission/reinforceFriendTeam
 type SMissionReinforceFriendTeam struct {
-	Guns            interface{} `json:"guns"`
-	Equips          interface{} `json:"equips"`
+	Guns            orderedmap.OrderedMap `json:"guns"`
+	Equips          orderedmap.OrderedMap `json:"equips"`
 	FriendTeamFairy struct {
 		ID              string `json:"id"`
 		UserID          string `json:"user_id"`

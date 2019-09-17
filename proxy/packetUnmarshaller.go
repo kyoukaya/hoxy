@@ -138,9 +138,6 @@ func Marshal(op string, v interface{}) ([]byte, error) {
 	err := encoder.Encode(v)
 	ret := buffer.Bytes()
 
-	// Hack to get byte perfect return
-	ret = bytes.ReplaceAll(ret, []byte(`/`), []byte(`\/`))
-	// TODO: Find a better way of escaping unicode characters
 	// Json encoder inserts an additional newline at the end
 	ret = bytes.TrimRight(ret, "\n")
 	return ret, err

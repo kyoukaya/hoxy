@@ -8,6 +8,7 @@ import (
 // SFriend/dormInfo
 type SFriendDormInfo struct {
 	Info struct {
+		// PraiseNum and VisitNum can sometimes be swapped.
 		PraiseNum int       `json:"praise_num"`
 		VisitNum  int       `json:"visit_num"`
 		UserID    types.Int `json:"user_id"`

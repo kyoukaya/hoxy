@@ -26,7 +26,7 @@ func (ios *Int) UnmarshalJSON(data []byte) error {
 		ios.FromStr = true
 		i, err := strconv.Atoi(string(data[1 : len(data)-1]))
 		if err != nil {
-			return errors.New("types.Int.UnmarshallingJSON: " + err.Error())
+			return errors.New("json: cannot unmarshal to types.Int: " + err.Error())
 		}
 		ios.Value = i
 		return nil

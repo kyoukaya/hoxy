@@ -13,7 +13,8 @@ type SMissionEndTurn struct {
 	BuildingDefenderChange *[]interface{}         `json:"building_defender_change,omitempty"`
 	// TODO: define lose event
 	MissionLoseResult *[]interface{} `json:"mission_lose_result,omitempty"`
-	MissionWinResult  *struct {
+	// Need a custom marshaller for this, when the json value is [] the struct should be nil
+	MissionWinResult *struct {
 		Rank   string `json:"rank"`
 		Medal4 int    `json:"medal4"`
 		Open   struct {

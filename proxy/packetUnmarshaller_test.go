@@ -121,6 +121,14 @@ func TestSIndexHome(t *testing.T) {
 		t.Error("Failed to cast")
 	}
 	testMarshalAndCompare(t, op, casted, orig)
+
+	orig = loadFile(t, "SIndexHome.1")
+	ret = testUnmarshal(t, op, orig)
+	casted, ok = ret.(*defs.SIndexHome)
+	if !ok {
+		t.Error("Failed to cast")
+	}
+	testMarshalAndCompare(t, op, casted, orig)
 }
 func TestCMissionBattleFinish(t *testing.T) {
 	op := "CMission/battleFinish"
@@ -219,6 +227,17 @@ func TestSGunDevelopLog(t *testing.T) {
 	orig := loadFile(t, "SGunDevelopLog")
 	ret := testUnmarshal(t, op, orig)
 	casted, ok := ret.(*defs.SGunDevelopLog)
+	if !ok {
+		t.Error(casted, ok)
+	}
+	testMarshalAndCompare(t, op, casted, orig)
+}
+
+func TestSMissionReinforceFriendTeam(t *testing.T) {
+	op := "SMission/reinforceFriendTeam"
+	orig := loadFile(t, "SMissionReinforceFriendTeam")
+	ret := testUnmarshal(t, op, orig)
+	casted, ok := ret.(*defs.SMissionReinforceFriendTeam)
 	if !ok {
 		t.Error(casted, ok)
 	}
