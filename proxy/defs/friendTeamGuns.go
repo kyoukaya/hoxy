@@ -1,5 +1,7 @@
 package defs
 
+import "github.com/iancoleman/orderedmap"
+
 // SFriend/teamGuns
 type SFriendTeamGuns struct {
 	BorrowTeamToday int `json:"borrow_team_today"`
@@ -29,45 +31,23 @@ type SFriendTeamGuns struct {
 			IfModification string `json:"if_modification"`
 			GunWithUserID  string `json:"gun_with_user_id"`
 		} `json:"guns_with_friend_available"`
-		// TODO:
-		// FriendTeamEffectArr struct {
-		// 	Num1022   string `json:"1022"`
-		// 	Num4731   string `json:"4731"`
-		// } `json:"friend_team_effect_arr"`
-		FriendTeamEffectArr interface{} `json:"friend_team_effect_arr"`
+		// FriendTeamEffectArr maps a user_id to a string.
+		FriendTeamEffectArr orderedmap.OrderedMap `json:"friend_team_effect_arr"`
 	} `json:"gun_with_friend"`
-	// TODO:
-	// FairyWithFriendInfo struct {
-	// 	Num1022 []struct {
-	// 		ID              string `json:"id"`
-	// 		UserID          string `json:"user_id"`
-	// 		GroupID         string `json:"group_id"`
-	// 		FairyID         string `json:"fairy_id"`
-	// 		FairyLv         string `json:"fairy_lv"`
-	// 		FairyExp        string `json:"fairy_exp"`
-	// 		QualityLv       string `json:"quality_lv"`
-	// 		QualityExp      string `json:"quality_exp"`
-	// 		SkillLv         string `json:"skill_lv"`
-	// 		PassiveSkill    string `json:"passive_skill"`
-	// 		EquipID         string `json:"equip_id"`
-	// 		Skin            string `json:"skin"`
-	// 		FairyWithUserID string `json:"fairy_with_user_id"`
-	// 	} `json:"1022"`
-	// 	Num4731 []struct {
-	// 		ID              string `json:"id"`
-	// 		UserID          string `json:"user_id"`
-	// 		GroupID         string `json:"group_id"`
-	// 		FairyID         string `json:"fairy_id"`
-	// 		FairyLv         string `json:"fairy_lv"`
-	// 		FairyExp        string `json:"fairy_exp"`
-	// 		QualityLv       string `json:"quality_lv"`
-	// 		QualityExp      string `json:"quality_exp"`
-	// 		SkillLv         string `json:"skill_lv"`
-	// 		PassiveSkill    string `json:"passive_skill"`
-	// 		EquipID         string `json:"equip_id"`
-	// 		Skin            string `json:"skin"`
-	// 		FairyWithUserID string `json:"fairy_with_user_id"`
-	// 	} `json:"4731"`
+	// FairyWithFriendInfo maps a user_id to type []struct {
+	// 	ID              string `json:"id"`
+	// 	UserID          string `json:"user_id"`
+	// 	GroupID         string `json:"group_id"`
+	// 	FairyID         string `json:"fairy_id"`
+	// 	FairyLv         string `json:"fairy_lv"`
+	// 	FairyExp        string `json:"fairy_exp"`
+	// 	QualityLv       string `json:"quality_lv"`
+	// 	QualityExp      string `json:"quality_exp"`
+	// 	SkillLv         string `json:"skill_lv"`
+	// 	PassiveSkill    string `json:"passive_skill"`
+	// 	EquipID         string `json:"equip_id"`
+	// 	Skin            string `json:"skin"`
+	// 	FairyWithUserID string `json:"fairy_with_user_id"`
 	// }
-	FairyWithFriendInfo interface{} `json:"fairy_with_friend_info"`
+	FairyWithFriendInfo orderedmap.OrderedMap `json:"fairy_with_friend_info"`
 }

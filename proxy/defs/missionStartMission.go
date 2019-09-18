@@ -16,7 +16,7 @@ type CMissionStartMission struct {
 type SMissionStartMission struct {
 	BuildingInfo []interface{} `json:"building_info"`
 	SquadInfo    []interface{} `json:"squad_info"`
-	Ap           int           `json:"ap"`
+	Ap           types.Int     `json:"ap"`
 	// Can throw marshal mismatch errors because it randomly changes ordering sometimes.
 	SpotActInfo []struct {
 		SpotID           string        `json:"spot_id"`

@@ -5,7 +5,7 @@ import "hoxy/proxy/defs/types"
 // SFriend/list
 type SFriendList struct {
 	List []struct {
-		Adjutant struct {
+		Adjutant *struct {
 			GunID string `json:"gun_id"`
 			Skin  string `json:"skin"`
 			Mod   string `json:"mod"`
@@ -18,7 +18,7 @@ type SFriendList struct {
 		HeadpicID     string    `json:"headpic_id"`
 		HomepageTime  types.Int `json:"homepage_time`
 		IsReturnUser  int       `json:"is_return_user"`
-		AdjutantFairy struct {
+		AdjutantFairy *struct {
 			FairyID string `json:"fairy_id"`
 			Skin    string `json:"skin"`
 		} `json:"adjutant_fairy,omitempty"`

@@ -23,6 +23,8 @@ type CMissionEndTrialExercise struct {
 		Num15 int `json:"15"`
 		Num16 int `json:"16"`
 		Num17 int `json:"17"`
+		Num33 int `json:"33"`
+		Num40 int `json:"40"`
 		Num18 int `json:"18"`
 		Num19 int `json:"19"`
 		Num20 int `json:"20"`
@@ -33,10 +35,8 @@ type CMissionEndTrialExercise struct {
 		Num25 int `json:"25"`
 		Num26 int `json:"26"`
 		Num27 int `json:"27"`
-		Num33 int `json:"33"`
 		Num34 int `json:"34"`
 		Num35 int `json:"35"`
-		Num40 int `json:"40"`
 		Num41 int `json:"41"`
 		Num42 int `json:"42"`
 		Num43 int `json:"43"`

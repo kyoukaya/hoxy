@@ -22,10 +22,12 @@ var (
 		`cloud\.unity3d\.com`,
 		`rayjump\.com`,
 		`duapps\.com`,
-		`spykemedia.g2afse.com`,
+		`spykemedia\.g2afse\.com`,
 		`ldmnq\.com`,
 		`erntech\.net`,
 		`st\.frecorp\.net`,
+		`apitask\.doglobal\.net`,
+		`baidu\.clickurl\.to`,
 	})
 	logFilter = GenerateFilter([]string{
 		// Seems like a lot of irrelevant data
@@ -43,8 +45,6 @@ var (
 		`google`,
 		`gstatic`,
 	})
-	// Authguard
-	authguardCount = 0
 )
 
 // GenerateFilter compiles a regexp expression for a given list of URLs
@@ -61,9 +61,7 @@ func GenerateFilter(list []string) *regexp.Regexp {
 // MITM'd.
 func HTTPSPassthrough(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
 	if httpsFilter.MatchString(host) {
-		// Count and print authguard connects
-		authguardCount++
-		log.Verbosef("~~~~ Authguard #%d\n", authguardCount)
+		log.Verbosef("~~~~ Authguard\n")
 		return goproxy.OkConnect, host
 	}
 	if telemetryFilter.MatchString(host) {
