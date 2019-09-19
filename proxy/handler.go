@@ -142,9 +142,9 @@ func (proxy *HoxyProxy) GetUser(UID string) *UserCtx {
 	return proxy.users[UID]
 }
 
-// AddUser records a user's information indexed by their UID, if a record belonging to
+// addUser records a user's information indexed by their UID, if a record belonging to
 // the specified UID already exists, its hooks will be shutdown and the record will be overwritten.
-func (proxy *HoxyProxy) AddUser(openID int, UID, sign, longtoken string) {
+func (proxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
 	proxy.mutex.Lock()
 	defer proxy.mutex.Unlock()
 

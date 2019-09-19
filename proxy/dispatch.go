@@ -3,14 +3,10 @@ package proxy
 import (
 	"hoxy/log"
 	"hoxy/proxy/defs"
+	"hoxy/proxy/userauth"
 	"net/http"
 
 	"github.com/elazarl/goproxy"
-)
-
-var (
-	// AuthHook is a special packet handler to be run when processing session tokens.
-	AuthHook func(string, interface{}, *goproxy.ProxyCtx, *HoxyProxy) (interface{}, error)
 )
 
 func (proxy *HoxyProxy) dispatchReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
@@ -100,12 +96,13 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 
 	// Run auth hook if SIndex/getUidEnMicaQueue is unmarshalled.
 	if _, ok := pkt.(*defs.SIndexGetUidEnMicaQueue); ok && unmarshalErr == nil {
-		_, err := AuthHook(op, pkt, ctx, proxy)
+		openID, UID, sign, longtoken, err := userauth.AuthHandler(op, pkt, ctx)
 		if err != nil {
 			log.Warnf("AuthHook failed to initialize ctx: %s", err)
 			log.Warnln(ctx.Req.Form)
 			return req, res
 		}
+		proxy.addUser(openID, UID, sign, longtoken)
 		// UserCtx should be initialized by the AuthHook hook
 		user := proxy.GetUser(pkt.(*defs.SIndexGetUidEnMicaQueue).UID)
 		user.initMods(modules)
