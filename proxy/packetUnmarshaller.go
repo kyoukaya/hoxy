@@ -111,12 +111,6 @@ func processOrderedMap(m interface{}) (interface{}, error) {
 	return m, fmt.Errorf("unexpected kind: %#v of type %#v", k, t)
 }
 
-type Marshaller orderedmap.OrderedMap
-
-func (marshaller Marshaller) Marshal(data interface{}) ([]byte, error) {
-	return marshal(orderedmap.OrderedMap(marshaller), data)
-}
-
 func decodeHook(from reflect.Type, to reflect.Type, data interface{}) (interface{}, error) {
 	// Coerce empty slice to empty struct if the expected kind is a struct.
 	if from.Kind() == reflect.Slice && to.Kind() == reflect.Struct {
@@ -157,7 +151,15 @@ func unMarshalfunc(op string, data []byte) (interface{}, MarshalFunc, error) {
 		if data[0] == '[' {
 			if data[1] != '{' {
 				err = json.Unmarshal(data, &ret)
-				return ret, json.Marshal, err
+				f := json.Marshal
+				// Hack to make SEquip/adjust like packets where the empty array is
+				// possible as a root value marshal back into the empty array.
+				if bytes.Equal(data, []byte(`[]`)) {
+					f = func(v interface{}) ([]byte, error) {
+						return []byte(`[]`), nil
+					}
+				}
+				return ret, f, err
 			}
 			tm := []orderedmap.OrderedMap{}
 			err = json.Unmarshal(data, &tm)

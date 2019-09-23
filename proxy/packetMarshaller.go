@@ -43,19 +43,6 @@ func isEmptyValue(data interface{}) (bool, error) {
 	return false, fmt.Errorf("marshal: unable to determine if %#v is empty, data: %#v", k, data)
 }
 
-// Escapes unicode characters and returns a copy
-func escapeUnicodeRunes(s string) string {
-	buf := bytes.Buffer{}
-	for _, v := range s {
-		if v > 0x7f {
-			buf.WriteString("\\u" + strconv.FormatInt(int64(v), 16))
-		} else {
-			buf.WriteRune(v)
-		}
-	}
-	return buf.String()
-}
-
 func coerceDataIntoRef(ref RefValue, data interface{}, dataT reflect.Type) ([]byte, error) {
 	dataK := dataT.Kind()
 	switch dataK {
@@ -92,13 +79,22 @@ func coerceDataIntoRef(ref RefValue, data interface{}, dataT reflect.Type) ([]by
 		}
 	case reflect.String:
 		s := data.(string)
-		// s = escapeUnicodeRunes(s)
-		s = strings.Replace(s, "\n", `\n`, -1)
-		s = strings.Replace(s, "\t", `\t`, -1)
-		s = strings.Replace(s, `/`, `\/`, -1)
-		s = strings.Replace(s, `"`, `\"`, -1)
 		if ref.k == reflect.String {
+			s = strings.Replace(s, "\n", `\n`, -1)
+			s = strings.Replace(s, "\t", `\t`, -1)
+			s = strings.Replace(s, `/`, `\/`, -1)
+			s = strings.Replace(s, `"`, `\"`, -1)
 			return []byte(`"` + s + `"`), nil
+		}
+		// Allow strings to be coerced into numbers as well
+		if ref.k == reflect.Int || ref.k == reflect.Float64 {
+			// validate that the data is a number
+			for _, v := range s {
+				if (v < '0' || v > '9') && v != '.' {
+					return []byte(`0`), fmt.Errorf("unable to coerce string '%s' into JSON number", s)
+				}
+			}
+			return []byte(s), nil
 		}
 	case reflect.Bool:
 		b := data.(bool)
@@ -209,12 +205,8 @@ func marshal(ref, data interface{}) ([]byte, error) {
 				}
 			case reflect.Ptr:
 				pValue := dataVal.Elem()
-				dataT = pValue.Type()
-				for i := 0; i < pValue.NumField(); i++ {
-					field := dataT.Field(i)
-					value := pValue.FieldByIndex([]int{i}).Interface()
-					dataMap[field.Tag.Get("json")] = value
-				}
+				// Unroll ptr
+				return marshal(ref, pValue.Interface())
 			default:
 				return []byte("null"), fmt.Errorf("marshal: unexpected kind in definition %#v", dataT.Kind().String())
 			}

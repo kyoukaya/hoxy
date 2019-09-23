@@ -14,24 +14,30 @@ type SMissionEndTurn struct {
 	// TODO: define lose event
 	MissionLoseResult []interface{} `json:"mission_lose_result"`
 	MissionWinResult  *struct {
-		Rank   string `json:"rank"`
-		Medal4 int    `json:"medal4"`
-		Open   struct {
-			Num3 int `json:"3"`
-		} `json:"open"`
-		UserExp   string `json:"user_exp"`
+		Rank      int         `json:"rank"`
+		Medal4    int         `json:"medal4"`
+		Open      map[int]int `json:"open"`
+		UserExp   int         `json:"user_exp"`
 		RewardGun struct {
-			GunWithUserID string `json:"gun_with_user_id"`
-			GunID         string `json:"gun_id"`
+			GunWithUserID int `json:"gun_with_user_id"`
+			GunID         int `json:"gun_id"`
 		} `json:"reward_gun"`
 		MissionInfo struct {
-			Turn                    string `json:"turn"`
-			EnemydieNum             string `json:"enemydie_num"`
-			EnemydieNumKillbyfriend string `json:"enemydie_num_killbyfriend"`
-			GundieNum               string `json:"gundie_num"`
+			Turn                    int `json:"turn"`
+			EnemydieNum             int `json:"enemydie_num"`
+			EnemydieNumKillbyfriend int `json:"enemydie_num_killbyfriend"`
+			GundieNum               int `json:"gundie_num"`
 		} `json:"mission_info"`
 	} `json:"mission_win_result"`
-	EnemyMove             []interface{} `json:"enemy_move"`
+	EnemyMove []struct {
+		FromSpotID      int `json:"from_spot_id"`
+		ToSpotID        int `json:"to_spot_id"`
+		EnemyAi         int `json:"enemy_ai"`
+		EnemyAiPara     int `json:"enemy_ai_para"`
+		HostageID       int `json:"hostage_id"`
+		HostageHp       int `json:"hostage_hp"`
+		SquadInstanceID int `json:"squad_instance_id"`
+	} `json:"enemy_move"`
 	AllyMove              []interface{} `json:"ally_move"`
 	AllyBattle            []interface{} `json:"ally_battle"`
 	Type5Score            string        `json:"type5_score"`

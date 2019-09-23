@@ -4,21 +4,21 @@ package defs
 type SFriendList struct {
 	List []struct {
 		Adjutant *struct {
-			GunID string `json:"gun_id"`
-			Skin  string `json:"skin"`
-			Mod   string `json:"mod"`
-			Ai    string `json:"ai"`
+			GunID int `json:"gun_id"`
+			Skin  int `json:"skin"`
+			Mod   int `json:"mod"`
+			Ai    int `json:"ai"`
 		} `json:"adjutant"`
 		FUserid       int    `json:"f_userid"`
 		EndTime       int    `json:"end_time"`
 		Name          string `json:"name"`
-		Lv            string `json:"lv"`
-		HeadpicID     string `json:"headpic_id"`
-		HomepageTime  int    `json:"homepage_time`
+		Lv            int    `json:"lv"`
+		HeadpicID     int    `json:"headpic_id"`
+		HomepageTime  int    `json:"homepage_time"`
 		IsReturnUser  int    `json:"is_return_user"`
 		AdjutantFairy *struct {
-			FairyID string `json:"fairy_id"`
-			Skin    string `json:"skin"`
+			FairyID int `json:"fairy_id"`
+			Skin    int `json:"skin"`
 		} `json:"adjutant_fairy"`
 	} `json:"list"`
 }

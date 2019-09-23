@@ -472,7 +472,7 @@ type SIndexIndex struct {
 		FavorToplimit  int  `json:"favor_toplimit"`
 		SoulBond       bool `json:"soul_bond"`
 		Skin           int  `json:"skin"`
-		CanClick       bool `json:"can_click"`
+		CanClick       int  `json:"can_click"`
 		SoulBondTime   int  `json:"soul_bond_time"`
 	} `json:"gun_with_user_info"`
 	ShowCdkey        int `json:"show_cdkey"`
