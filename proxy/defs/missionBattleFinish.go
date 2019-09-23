@@ -1,7 +1,5 @@
 package defs
 
-import "github.com/iancoleman/orderedmap"
-
 // TODO: document what all these cryptic fields mean.
 
 // Mission/battleFinish
@@ -48,14 +46,13 @@ type CMissionBattleFinish struct {
 	} `json:"1000"`
 	Num1001 struct {
 	} `json:"1001"`
-	// Value is an ordered map like so, [1,2,3,4,5] are gun_with_user_id
-	// {"gun_with_user_id":{"47":01},"gun_with_user_id":{"47":10}
-	// "gun_with_user_id":{"47":0},"gun_with_user_id":{"47":0},"gun_with_user_id":{"47":0}}
-	Num1002 orderedmap.OrderedMap `json:"1002"`
+	Num1002 map[string]struct {
+		Num47 int `json:"47"`
+	} `json:"1002"`
 	// Seems to be a map of a fairy id to some unknown object
 	// {"fairy_id":{"9":0,"68":0}}
-	Num1003      orderedmap.OrderedMap `json:"1003"`
-	Num1005      interface{}           `json:"1005"`
+	Num1003      map[string]map[string]int `json:"1003"`
+	Num1005      interface{}               `json:"1005"`
 	BattleDamage struct {
 	} `json:"battle_damage"`
 }
@@ -70,19 +67,19 @@ type SMissionBattleFinish struct {
 		GunWithUserID string `json:"gun_with_user_id"`
 		Exp           string `json:"exp"`
 	} `json:"gun_exp"`
-	FairyExp               *int                  `json:"fairy_exp,omitempty"`
-	GunLife                []interface{}         `json:"gun_life"`
-	SquadExp               []interface{}         `json:"squad_exp"`
-	BattleRank             string                `json:"battle_rank"`
-	FreeExp                int                   `json:"free_exp"`
-	ChangeBelong           []interface{}         `json:"change_belong"`
-	BuildingDefenderChange []interface{}         `json:"building_defender_change"`
-	MissionWinResult       []interface{}         `json:"mission_win_result"`
-	Seed                   int                   `json:"seed"`
-	FavorChange            orderedmap.OrderedMap `json:"favor_change"` // map[string]Int
-	Type5Score             string                `json:"type5_score"`
-	AllyInstanceTransform  []interface{}         `json:"ally_instance_transform"`
-	AllyInstanceBetray     []interface{}         `json:"ally_instance_betray"`
+	FairyExp               int           `json:"fairy_exp"`
+	GunLife                []interface{} `json:"gun_life"`
+	SquadExp               []interface{} `json:"squad_exp"`
+	BattleRank             string        `json:"battle_rank"`
+	FreeExp                int           `json:"free_exp"`
+	ChangeBelong           []interface{} `json:"change_belong"`
+	BuildingDefenderChange []interface{} `json:"building_defender_change"`
+	MissionWinResult       []interface{} `json:"mission_win_result"`
+	Seed                   int           `json:"seed"`
+	FavorChange            map[int]int   `json:"favor_change"`
+	Type5Score             string        `json:"type5_score"`
+	AllyInstanceTransform  []interface{} `json:"ally_instance_transform"`
+	AllyInstanceBetray     []interface{} `json:"ally_instance_betray"`
 	MissionControl         struct {
 		Num1 int `json:"1"`
 		Num2 int `json:"2"`

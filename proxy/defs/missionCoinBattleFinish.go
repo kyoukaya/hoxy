@@ -31,7 +31,9 @@ type CMissionCoinBattleFinish struct {
 	} `json:"1000"`
 	Num1001 struct {
 	} `json:"1001"`
-	Num1002 interface{} `json:"1002"` // map-like structure
+	Num1002 map[int]struct {
+		Num47 int `json:"47"`
+	} `json:"1002"`
 	Num1003 struct {
 	} `json:"1003"`
 	Num1005 struct {
@@ -41,4 +43,9 @@ type CMissionCoinBattleFinish struct {
 	Duration   float64 `json:"duration"`
 	BattleTime struct {
 	} `json:"battle_time"`
+}
+
+type SMissionCoinBattleFinish struct {
+	CoinNum  string `json:"coin_num"`
+	CoinType string `json:"coin_type"`
 }

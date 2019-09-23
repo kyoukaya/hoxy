@@ -2,7 +2,7 @@ package defs
 
 // SMission/endEnemyTurn
 type SMissionEndEnemyTurn struct {
-	ChangeBelong           interface{}   `json:"change_belong"`
+	ChangeBelong           map[int]int   `json:"change_belong"`
 	BuildingChangeBelong   []interface{} `json:"building_change_belong"`
 	BuildingDefenderChange []interface{} `json:"building_defender_change"`
 	MissionLoseResult      []interface{} `json:"mission_lose_result"`

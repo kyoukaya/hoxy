@@ -1,7 +1,5 @@
 package defs
 
-import "hoxy/proxy/defs/types"
-
 // SEquip/developCollectList
 type SEquipDevelopCollectList struct {
 	LogList []struct {
@@ -9,7 +7,7 @@ type SEquipDevelopCollectList struct {
 		LogID        string      `json:"log_id"`
 		UserID       string      `json:"user_id"`
 		DevUID       interface{} `json:"dev_uid"`
-		DevUname     types.Str   `json:"dev_uname"`
+		DevUname     string      `json:"dev_uname"`
 		DevLv        string      `json:"dev_lv"`
 		EquipID      string      `json:"equip_id"`
 		Mp           string      `json:"mp"`

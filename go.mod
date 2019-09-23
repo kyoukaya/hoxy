@@ -9,6 +9,7 @@ require (
 	github.com/logrusorgru/aurora v0.0.0-20190803045625-94edacc10f9b
 	github.com/mattn/go-colorable v0.1.2
 	github.com/mattn/go-isatty v0.0.9 // indirect
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/sergi/go-diff v1.0.0
 	github.com/stretchr/testify v1.4.0 // indirect
 )

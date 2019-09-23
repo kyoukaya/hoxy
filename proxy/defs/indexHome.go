@@ -1,7 +1,5 @@
 package defs
 
-import "hoxy/proxy/defs/types"
-
 // CIndexHome Client's request for Index/home
 type CIndexHome struct {
 	DataVersion string `json:"data_version"`
@@ -18,10 +16,10 @@ type SIndexHome struct {
 	RecoverPart   int `json:"recover_part"`
 	Gem           int `json:"gem"`
 	AllFavorupGun []struct {
-		GunWithUserID string    `json:"gun_with_user_id"`
-		FavorAfteradd types.Int `json:"favor_afteradd"`
+		GunWithUserID string `json:"gun_with_user_id"`
+		FavorAfteradd int    `json:"favor_afteradd"`
 	} `json:"all_favorup_gun"`
-	LastFavorRecoverTime types.Int     `json:"last_favor_recover_time"`
+	LastFavorRecoverTime int           `json:"last_favor_recover_time"`
 	RecoverSsoc          int           `json:"recover_ssoc"`
 	LastSsocChangeTime   int           `json:"last_ssoc_change_time"`
 	Kick                 int           `json:"kick"`
@@ -41,33 +39,33 @@ type SIndexHome struct {
 		IsReturnUser int    `json:"is_return_user"`
 	} `json:"friend_applylist"`
 	IndexGetmaillist []struct {
-		ID        string    `json:"id"`
-		UserID    string    `json:"user_id"`
-		Type      string    `json:"type"`
-		SubID     string    `json:"sub_id"`
-		UserExp   string    `json:"user_exp"`
-		Mp        string    `json:"mp"`
-		Ammo      string    `json:"ammo"`
-		Mre       string    `json:"mre"`
-		Part      string    `json:"part"`
-		Core      string    `json:"core"`
-		Gem       string    `json:"gem"`
-		GunID     string    `json:"gun_id"`
-		FairyIds  string    `json:"fairy_ids"`
-		ItemIds   string    `json:"item_ids"`
-		EquipIds  string    `json:"equip_ids"`
-		Furniture string    `json:"furniture"`
-		Gift      string    `json:"gift"`
-		Coins     string    `json:"coins"`
-		Skin      string    `json:"skin"`
-		BpPay     string    `json:"bp_pay"`
-		Chip      string    `json:"chip"`
-		Title     string    `json:"title"`
-		Content   types.Str `json:"content"`
-		Code      string    `json:"code"`
-		StartTime string    `json:"start_time"`
-		EndTime   string    `json:"end_time"`
-		IfRead    string    `json:"if_read"`
+		ID        string `json:"id"`
+		UserID    string `json:"user_id"`
+		Type      string `json:"type"`
+		SubID     string `json:"sub_id"`
+		UserExp   string `json:"user_exp"`
+		Mp        string `json:"mp"`
+		Ammo      string `json:"ammo"`
+		Mre       string `json:"mre"`
+		Part      string `json:"part"`
+		Core      string `json:"core"`
+		Gem       string `json:"gem"`
+		GunID     string `json:"gun_id"`
+		FairyIds  string `json:"fairy_ids"`
+		ItemIds   string `json:"item_ids"`
+		EquipIds  string `json:"equip_ids"`
+		Furniture string `json:"furniture"`
+		Gift      string `json:"gift"`
+		Coins     string `json:"coins"`
+		Skin      string `json:"skin"`
+		BpPay     string `json:"bp_pay"`
+		Chip      string `json:"chip"`
+		Title     string `json:"title"`
+		Content   string `json:"content"`
+		Code      string `json:"code"`
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+		IfRead    string `json:"if_read"`
 	} `json:"index_getmaillist"`
 	SquadDataDaily []struct {
 		UserID         int    `json:"user_id"`

@@ -1,7 +1,5 @@
 package defs
 
-import "hoxy/proxy/defs/types"
-
 // CFriend/visit
 type CFriendVisit struct {
 	FUserid int `json:"f_userid"`
@@ -9,15 +7,15 @@ type CFriendVisit struct {
 
 type SFriendVisit struct {
 	Info struct {
-		VisitNum     int       `json:"visit_num"`
-		PraiseNum    int       `json:"praise_num"`
-		UserID       int       `json:"user_id"`
-		Lv           string    `json:"lv"`
-		FUserid      int       `json:"f_userid"`
-		Name         string    `json:"name"`
-		IsPraise     int       `json:"is_praise"`
-		HeadpicID    types.Int `json:"headpic_id"`
-		HomepageTime int       `json:"homepage_time"`
+		VisitNum     int    `json:"visit_num"`
+		PraiseNum    int    `json:"praise_num"`
+		UserID       int    `json:"user_id"`
+		Lv           string `json:"lv"`
+		FUserid      int    `json:"f_userid"`
+		Name         string `json:"name"`
+		IsPraise     int    `json:"is_praise"`
+		HeadpicID    int    `json:"headpic_id"`
+		HomepageTime int    `json:"homepage_time"`
 	} `json:"info"`
 	AdjutantList []struct {
 		Adjutant struct {
@@ -29,7 +27,7 @@ type SFriendVisit struct {
 		FUserid      int         `json:"f_userid"`
 		Name         string      `json:"name"`
 		Lv           string      `json:"lv"`
-		HeadpicID    types.Int   `json:"headpic_id"`
+		HeadpicID    int         `json:"headpic_id"`
 		HomepageTime int         `json:"homepage_time"`
 		Comment      interface{} `json:"comment"`
 	} `json:"adjutant_list"`
