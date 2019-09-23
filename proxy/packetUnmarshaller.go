@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"hoxy/log"
 	"reflect"
 	"strings"
 	"unicode"
 
-	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/iancoleman/orderedmap"
+	"github.com/mitchellh/mapstructure"
 )
 
 // Returns the operation string of a properly named def.
@@ -51,7 +51,7 @@ type MarshalMismatchErr struct {
 }
 
 // MarshalFunc is a function that will perform json marshalling for ann interface
-type MarshalFunc func(op string, v interface{}) ([]byte, error)
+type MarshalFunc func(v interface{}) ([]byte, error)
 
 // UnMarshalFunc is a function that will perform json unmarshalling into an interface
 type UnMarshalFunc func(op string, data []byte) (interface{}, error)
@@ -64,7 +64,76 @@ func (e MarshalMismatchErr) Error() string {
 	return fmt.Sprintf("MarshalMismatchErr: mismatch on data for %s", e.op)
 }
 
-func unMarshalfunc(op string, data []byte) (interface{}, error) {
+var omType = reflect.TypeOf(orderedmap.OrderedMap{})
+
+func processOrderedMap(m interface{}) (interface{}, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	if _, ok := m.(orderedmap.OrderedMap); ok {
+		om := m.(orderedmap.OrderedMap)
+		keys := om.Keys()
+		for _, k := range keys {
+			i, _ := om.Get(k)
+			sub, err := processOrderedMap(i)
+			if err != nil {
+				return m, err
+			}
+			om.Set(k, sub)
+		}
+		return m, nil
+	}
+
+	t := reflect.TypeOf(m)
+	k := t.Kind()
+	switch k {
+	case reflect.Int:
+		return RefValue{k: reflect.Int}, nil
+	case reflect.Float64:
+		return RefValue{k: reflect.Float64}, nil
+	case reflect.Slice:
+		sl := reflect.ValueOf(m)
+		var newSl []interface{}
+		for i := 0; i < sl.Len(); i++ {
+			sub, err := processOrderedMap(sl.Index(i).Interface())
+			if err != nil {
+				return newSl, err
+			}
+			newSl = append(newSl, sub)
+		}
+		return newSl, nil
+	case reflect.String:
+		return RefValue{k: reflect.String, isEmptyString: m.(string) == ""}, nil
+	case reflect.Bool:
+		return RefValue{k: reflect.Bool}, nil
+	}
+	return m, fmt.Errorf("unexpected kind: %#v of type %#v", k, t)
+}
+
+type Marshaller orderedmap.OrderedMap
+
+func (marshaller Marshaller) Marshal(data interface{}) ([]byte, error) {
+	return marshal(orderedmap.OrderedMap(marshaller), data)
+}
+
+func decodeHook(from reflect.Type, to reflect.Type, data interface{}) (interface{}, error) {
+	// Coerce empty slice to empty struct if the expected kind is a struct.
+	if from.Kind() == reflect.Slice && to.Kind() == reflect.Struct {
+		return struct{}{}, nil
+	}
+	// Coerce empty string into an int
+	if from.Kind() == reflect.String && to.Kind() == reflect.Int {
+		fs := data.(string)
+		if fs == "" {
+			return 0, nil
+		}
+		return data, nil
+	}
+	return data, nil
+}
+
+func unMarshalfunc(op string, data []byte) (interface{}, MarshalFunc, error) {
 	var ret interface{}
 	var err error
 	DefMapLock.Lock()
@@ -73,72 +142,107 @@ func unMarshalfunc(op string, data []byte) (interface{}, error) {
 	if ok {
 		v := reflect.New(t)
 		ret = v.Interface()
-		err = json.Unmarshal(data, ret)
-	} else {
-		err = MarshalNoDefErr{op, data}
+
+		if data[0] != '{' && data[0] != '[' {
+			err = json.Unmarshal(data, &ret)
+			return ret, json.Marshal, err
+		}
+		// hack: incredibly inefficient way to stop encoding/json from converting
+		// unicode escape sequences into unicode runes.
+		data = bytes.ReplaceAll(data, []byte(`\u`), []byte(`\\u`))
+
+		// This whole block needs to be refactored as it violates DRY quite severely.
+
+		// Hack to handle json arrays of values such as in CGun/retireGun
+		if data[0] == '[' {
+			if data[1] != '{' {
+				err = json.Unmarshal(data, &ret)
+				return ret, json.Marshal, err
+			}
+			tm := []orderedmap.OrderedMap{}
+			err = json.Unmarshal(data, &tm)
+			if err != nil {
+				return ret, nil, err
+			}
+			_, err := processOrderedMap(tm)
+			if err != nil {
+				return ret, nil, err
+			}
+			m := []map[string]interface{}{}
+			err = json.Unmarshal(data, &m)
+			if err != nil {
+				return ret, nil, err
+			}
+			conf := &mapstructure.DecoderConfig{
+				WeaklyTypedInput: true,
+				Result:           ret,
+				TagName:          "json",
+				ErrorUnused:      true,
+				DecodeHook:       decodeHook,
+			}
+			dec, _ := mapstructure.NewDecoder(conf)
+			err = dec.Decode(&m)
+			marFunc := func(v interface{}) ([]byte, error) {
+				return marshal(tm, v)
+			}
+			return ret, marFunc, err
+		}
+
+		tm := orderedmap.OrderedMap{}
+		err = json.Unmarshal(data, &tm)
+		if err != nil {
+			return ret, nil, err
+		}
+		_, err := processOrderedMap(tm)
+		if err != nil {
+			return ret, nil, err
+		}
+		m := map[string]interface{}{}
+		err = json.Unmarshal(data, &m)
+		if err != nil {
+			return ret, nil, err
+		}
+		conf := &mapstructure.DecoderConfig{
+			WeaklyTypedInput: true,
+			Result:           ret,
+			TagName:          "json",
+			ErrorUnused:      true,
+			DecodeHook:       decodeHook,
+		}
+		dec, _ := mapstructure.NewDecoder(conf)
+		err = dec.Decode(&m)
+		marFunc := func(v interface{}) ([]byte, error) {
+			return marshal(tm, v)
+		}
+		return ret, marFunc, err
 	}
-	return ret, err
+	err = MarshalNoDefErr{op, data}
+	return ret, nil, err
 }
 
 // UnMarshal takes json data in byte form and unmarshals it to a struct specified by
 // the op string.
-func UnMarshal(op string, data []byte) (interface{}, error) {
+func UnMarshal(op string, data []byte) (interface{}, MarshalFunc, error) {
 	var ret interface{}
 	var err error
 
 	if data == nil {
-		return &SignCode{}, nil
+		return &SignCode{}, nil, nil
 	}
 
-	// TODO: define custom unmarshalling routine and defs for packets that break the mould
-	// potentially return a function to marshal back into bytes.
-	DefMapLock.Lock()
-	_, ok := DefMap[strings.ToLower(op)]
-	DefMapLock.Unlock()
-	var unMarFunc UnMarshalFunc
-	var marFunc MarshalFunc
-	if ok {
-		marFunc = Marshal
-		unMarFunc = unMarshalfunc
-	} else {
-		err = MarshalNoDefErr{op, data}
-	}
-	if err != nil {
-		return nil, err
-	}
+	ret, marFunc, err := unMarshalfunc(op, data)
 
-	ret, err = unMarFunc(op, data)
-
+	// TODO: allow user to toggle marshalling validation.
 	// compare UnMarshaled->json data with original data
 	if err == nil {
 		var remarshal []byte
-		remarshal, err = marFunc(op, ret)
+		remarshal, err = marFunc(ret)
 		if err != nil {
-			return ret, err
+			return ret, marFunc, err
 		}
-		// TODO: maps in go aren't ordered so map[string]interfaces typically cause
-		// mismatch warnings. Probably not much we can do besides writing a new json
-		// library.
 		if !bytes.Equal(data, remarshal) {
-			dmp := diffmatchpatch.New()
-			diffs := dmp.DiffMain(string(data), string(remarshal), false)
-			log.Warnln(dmp.DiffPrettyText(diffs))
 			err = MarshalMismatchErr{op, data, remarshal}
 		}
 	}
-	return ret, err
-}
-
-// Marshal takes in a struct representing the json data and unmarshals it
-// back into a slice of bytes.
-func Marshal(op string, v interface{}) ([]byte, error) {
-	buffer := &bytes.Buffer{}
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(v)
-	ret := buffer.Bytes()
-
-	// Json encoder inserts an additional newline at the end
-	ret = bytes.TrimRight(ret, "\n")
-	return ret, err
+	return ret, marFunc, err
 }

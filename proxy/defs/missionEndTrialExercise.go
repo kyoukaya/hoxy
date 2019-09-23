@@ -1,21 +1,14 @@
 package defs
 
-import (
-	"hoxy/proxy/defs/types"
-
-	"github.com/iancoleman/orderedmap"
-)
-
 // CMission/endTrialExercise
 type CMissionEndTrialExercise struct {
-	IfWin int `json:"if_win"`
-	// Ordered map of gun_with_user_id -> struct {
-	// 		Life int `json:"life"`
-	// 		Dps  int `json:"dps"`
-	// 	}
-	BattleGuns orderedmap.OrderedMap `json:"battle_guns"`
-	UserRec    string                `json:"user_rec"`
-	Num1000    struct {
+	IfWin      int `json:"if_win"`
+	BattleGuns map[int]struct {
+		Life int `json:"life"`
+		Dps  int `json:"dps"`
+	} `json:"battle_guns"`
+	UserRec string `json:"user_rec"`
+	Num1000 struct {
 		Num10 int `json:"10"`
 		Num11 int `json:"11"`
 		Num12 int `json:"12"`
@@ -44,10 +37,9 @@ type CMissionEndTrialExercise struct {
 	} `json:"1000"`
 	Num1001 struct {
 	} `json:"1001"`
-	// gun_with_user_id -> struct {
-	// 	Num47 int `json:"47"`
-	// }
-	Num1002 orderedmap.OrderedMap `json:"1002"`
+	Num1002 map[int]struct {
+		Num47 int `json:"47"`
+	} `json:"1002"`
 	Num1003 struct {
 	} `json:"1003"`
 	Num1005 struct {
@@ -58,7 +50,7 @@ type CMissionEndTrialExercise struct {
 
 type SMissionEndTrialExercise struct {
 	// gun_with_user_id -> int
-	GunsDps       orderedmap.OrderedMap `json:"guns_dps"`
-	GunsRealLife  orderedmap.OrderedMap `json:"guns_real_life"`
-	RewardVoucher types.Int             `json:"reward_voucher"`
+	GunsDps       map[int]int `json:"guns_dps"`
+	GunsRealLife  map[int]int `json:"guns_real_life"`
+	RewardVoucher int         `json:"reward_voucher"`
 }

@@ -27,25 +27,6 @@ func compareOutput(orig, marshalled []byte) error {
 	return nil
 }
 
-func testUnmarshal(t *testing.T, op string, orig []byte) interface{} {
-	ret, err := UnMarshal(op, orig)
-	if err != nil {
-		t.Error(err)
-		t.Errorf("%#v\n", ret)
-	}
-	return ret
-}
-
-func testMarshalAndCompare(t *testing.T, op string, pkt interface{}, orig []byte) {
-	marshalled, err := Marshal(op, pkt)
-	if err != nil {
-		t.Error(err)
-	}
-	if err := compareOutput(orig, marshalled); err != nil {
-		t.Error(err)
-	}
-}
-
 func nameToOpString(typeName string) string {
 	upCount := 0
 	nameBuf := bytes.Buffer{}
@@ -60,6 +41,18 @@ func nameToOpString(typeName string) string {
 		nameBuf.WriteRune(v)
 	}
 	return nameBuf.String()
+}
+
+func testMarshalAndCompare(t *testing.T, marFunc MarshalFunc, data interface{}, orig []byte) {
+	mar, err := marFunc(data)
+	if err != nil {
+		t.Error(err)
+	}
+	if !bytes.Equal(mar, orig) {
+		t.Errorf("Marshalled output different from original\n"+
+			"Original: %s\n"+
+			"Output:   %s", orig, mar)
+	}
 }
 
 // Test that all defs declared in hoxy/proxy/defs are initialized in proxy.DefMap.
@@ -104,142 +97,247 @@ func loadFile(t *testing.T, fileName string) []byte {
 func TestGetUidEnMicaQueue(t *testing.T) {
 	op := "SIndex/getUidEnMicaQueue"
 	orig := loadFile(t, "SMicaQueue")
-	ret := testUnmarshal(t, op, orig)
-	micaQueue, ok := ret.(*defs.SIndexGetUidEnMicaQueue)
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SIndexGetUidEnMicaQueue)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
-	testMarshalAndCompare(t, op, micaQueue, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSIndexIndex(t *testing.T) {
+	op := "SIndex/index"
+	orig := loadFile(t, "SIndexIndex")
+	ret, marFunc, err := UnMarshal(op, orig)
+	if err != nil {
+		t.Error(err)
+	}
+	casted, ok := ret.(*defs.SIndexIndex)
+	if !ok {
+		t.Error("Failed to cast")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSIndexDownloadSuccess(t *testing.T) {
+	op := "SIndex/downloadSuccess"
+	orig := []byte(`1`)
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SIndexDownloadSuccess)
+	if !ok {
+		t.Error("Failed to cast")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSIndexGetMailList(t *testing.T) {
+	op := "SIndex/getMailList"
+	orig := []byte(`[]`)
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SIndexGetMailList)
+	if !ok {
+		t.Error("Failed to cast")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSIndexHome(t *testing.T) {
 	op := "SIndex/home"
 	orig := loadFile(t, "SIndexHome")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SIndexHome)
 	if !ok {
 		t.Error("Failed to cast")
 	}
-	testMarshalAndCompare(t, op, casted, orig)
-
-	orig = loadFile(t, "SIndexHome.1")
-	ret = testUnmarshal(t, op, orig)
-	casted, ok = ret.(*defs.SIndexHome)
-	if !ok {
-		t.Error("Failed to cast")
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
 }
 func TestCMissionBattleFinish(t *testing.T) {
 	op := "CMission/battleFinish"
 	orig := loadFile(t, "CMissionBattleFinish")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.CMissionBattleFinish)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSMissionBattleFinish(t *testing.T) {
 	op := "SMission/battleFinish"
 	orig := loadFile(t, "SMissionBattleFinish")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SMissionBattleFinish)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+	orig = loadFile(t, "SMissionBattleFinish.1")
+	ret, marFunc, err = UnMarshal(op, orig)
+	casted, ok = ret.(*defs.SMissionBattleFinish)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSMissionDrawEvent(t *testing.T) {
+	op := "SMission/drawEvent"
+	orig := loadFile(t, "SMissionDrawEvent")
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SMissionDrawEvent)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSMissionEndTurn(t *testing.T) {
 	t.Log("Testing w/o MissionWinResult,ChangeBelong1,BuildingChangeBelong1")
 	op := "SMission/endTurn"
 	orig := loadFile(t, "SMissionEndTurn.1")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SMissionEndTurn)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 	t.Log("Testing w/ MissionWinResult,ChangeBelong1,BuildingChangeBelong1")
 	// Test with missionwinresult
 	orig = loadFile(t, "SMissionEndTurn.2")
-	ret = testUnmarshal(t, op, orig)
+	ret, marFunc, err = UnMarshal(op, orig)
 	casted, ok = ret.(*defs.SMissionEndTurn)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestCGunRetireGun(t *testing.T) {
+	op := "CGun/retireGun"
+	orig := []byte(`[1,2,3,4]`)
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.CGunRetireGun)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		t.Error(err)
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func Benchmark(b *testing.B) {
+	op := "SFriend/teamGuns"
+	orig := loadFile(nil, "SFriendTeamGuns")
+	UnMarshal(op, orig)
 }
 
 func TestSFriendDormInfo(t *testing.T) {
 	op := "SFriend/dormInfo"
 	orig := loadFile(t, "SFriendDormInfo")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SFriendDormInfo)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+	orig = loadFile(t, "SFriendDormInfo.1")
+	ret, marFunc, err = UnMarshal(op, orig)
+	casted, ok = ret.(*defs.SFriendDormInfo)
+	if !ok {
+		t.Error(casted, ok)
+	}
+	if err != nil {
+		t.Error(err)
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSStartMission(t *testing.T) {
-	// TODO: struct order sometimes changes
-	// These 2 spot_ids have a different ordering on their structs, extracted from the
-	// test json.
-	// {"spot_id":"12","team_id":"1","belong":"1","if_random":"0","reinforce_count":"1","seed":2068,"enemy_team_id":"0","boss_hp":"0","enemy_hp_percent":"1","enemy_instance_id":"0","enemy_ai":0,"enemy_ai_para":"","ally_instance_ids":[],"squad_instance_ids":[],"hostage_id":"0","hostage_hp":"0","hostage_max_hp":"0","enemy_birth_turn":"999","supply_count":"0"},
-	// {"spot_id":"9","team_id":"2","belong":"1","if_random":"0","reinforce_count":"1","seed":6348,"enemy_team_id":"0","boss_hp":"0","enemy_hp_percent":"1","enemy_instance_id":"0","enemy_ai":0,"enemy_ai_para":"","ally_instance_ids":[],"squad_instance_ids":[],"hostage_id":"0","hostage_hp":"0","hostage_max_hp":"0","enemy_birth_turn":"999","supply_count":"0"}
 	op := "SMission/startMission"
 	orig := loadFile(t, "SMissionStartMission")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SMissionStartMission)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSIndexQuest(t *testing.T) {
 	op := "SIndex/Quest"
 	orig := loadFile(t, "SIndexQuest")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SIndexQuest)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSGunDevelopCollectList(t *testing.T) {
 	op := "SGun/developCollectList"
 	orig := loadFile(t, "SGunDevelopCollectList")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SGunDevelopCollectList)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSGunDevelopLog(t *testing.T) {
 	op := "SGun/developLog"
 	orig := loadFile(t, "SGunDevelopLog")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SGunDevelopLog)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }
 
 func TestSMissionReinforceFriendTeam(t *testing.T) {
 	op := "SMission/reinforceFriendTeam"
 	orig := loadFile(t, "SMissionReinforceFriendTeam")
-	ret := testUnmarshal(t, op, orig)
+	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.SMissionReinforceFriendTeam)
 	if !ok {
 		t.Error(casted, ok)
 	}
-	testMarshalAndCompare(t, op, casted, orig)
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
 }

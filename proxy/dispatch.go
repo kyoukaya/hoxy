@@ -71,7 +71,7 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 		}
 	}
 
-	pkt, unmarshalErr := UnMarshal(op, dec)
+	pkt, _, unmarshalErr := UnMarshal(op, dec)
 	if unmarshalErr != nil {
 		switch unmarshalErr.(type) {
 		case MarshalNoDefErr:

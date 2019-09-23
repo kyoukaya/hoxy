@@ -1,7 +1,5 @@
 package defs
 
-import "hoxy/proxy/defs/types"
-
 // Mission/startMission
 type CMissionStartMission struct {
 	MissionID int `json:"mission_id"`
@@ -16,7 +14,7 @@ type CMissionStartMission struct {
 type SMissionStartMission struct {
 	BuildingInfo []interface{} `json:"building_info"`
 	SquadInfo    []interface{} `json:"squad_info"`
-	Ap           types.Int     `json:"ap"`
+	Ap           int           `json:"ap"`
 	// Can throw marshal mismatch errors because it randomly changes ordering sometimes.
 	SpotActInfo []struct {
 		SpotID           string        `json:"spot_id"`
@@ -25,8 +23,8 @@ type SMissionStartMission struct {
 		EnemyHpPercent   string        `json:"enemy_hp_percent"`
 		EnemyInstanceID  string        `json:"enemy_instance_id"`
 		EnemyBirthTurn   string        `json:"enemy_birth_turn"`
-		EnemyAi          types.Int     `json:"enemy_ai"`
-		EnemyAiPara      types.Int     `json:"enemy_ai_para"`
+		EnemyAi          int           `json:"enemy_ai"`
+		EnemyAiPara      int           `json:"enemy_ai_para"`
 		Belong           string        `json:"belong"`
 		IfRandom         string        `json:"if_random"`
 		Seed             int           `json:"seed"`

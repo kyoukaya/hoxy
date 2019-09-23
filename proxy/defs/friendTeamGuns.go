@@ -1,7 +1,5 @@
 package defs
 
-import "github.com/iancoleman/orderedmap"
-
 // SFriend/teamGuns
 type SFriendTeamGuns struct {
 	BorrowTeamToday int `json:"borrow_team_today"`
@@ -32,22 +30,22 @@ type SFriendTeamGuns struct {
 			GunWithUserID  string `json:"gun_with_user_id"`
 		} `json:"guns_with_friend_available"`
 		// FriendTeamEffectArr maps a user_id to a string.
-		FriendTeamEffectArr orderedmap.OrderedMap `json:"friend_team_effect_arr"`
+		FriendTeamEffectArr map[int]string `json:"friend_team_effect_arr"`
 	} `json:"gun_with_friend"`
-	// FairyWithFriendInfo maps a user_id to type []struct {
-	// 	ID              string `json:"id"`
-	// 	UserID          string `json:"user_id"`
-	// 	GroupID         string `json:"group_id"`
-	// 	FairyID         string `json:"fairy_id"`
-	// 	FairyLv         string `json:"fairy_lv"`
-	// 	FairyExp        string `json:"fairy_exp"`
-	// 	QualityLv       string `json:"quality_lv"`
-	// 	QualityExp      string `json:"quality_exp"`
-	// 	SkillLv         string `json:"skill_lv"`
-	// 	PassiveSkill    string `json:"passive_skill"`
-	// 	EquipID         string `json:"equip_id"`
-	// 	Skin            string `json:"skin"`
-	// 	FairyWithUserID string `json:"fairy_with_user_id"`
-	// }
-	FairyWithFriendInfo orderedmap.OrderedMap `json:"fairy_with_friend_info"`
+	// FairyWithFriendInfo maps a user_id to type
+	FairyWithFriendInfo map[int][]struct {
+		ID              string `json:"id"`
+		UserID          string `json:"user_id"`
+		GroupID         string `json:"group_id"`
+		FairyID         string `json:"fairy_id"`
+		FairyLv         string `json:"fairy_lv"`
+		FairyExp        string `json:"fairy_exp"`
+		QualityLv       string `json:"quality_lv"`
+		QualityExp      string `json:"quality_exp"`
+		SkillLv         string `json:"skill_lv"`
+		PassiveSkill    string `json:"passive_skill"`
+		EquipID         string `json:"equip_id"`
+		Skin            string `json:"skin"`
+		FairyWithUserID string `json:"fairy_with_user_id"`
+	} `json:"fairy_with_friend_info"`
 }

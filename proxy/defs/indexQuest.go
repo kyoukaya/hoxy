@@ -1,16 +1,12 @@
 package defs
 
-import (
-	"github.com/iancoleman/orderedmap"
-)
-
 // CIndexQuest has no request body
 
 // SIndexQuest Server's Index/Quest response
 type SIndexQuest struct {
-	Daily             *orderedmap.OrderedMap `json:"daily"`
-	Weekly            *orderedmap.OrderedMap `json:"weekly"`
-	Career            *orderedmap.OrderedMap `json:"career"`
+	Daily             map[string]int `json:"daily"`
+	Weekly            map[string]int `json:"weekly"`
+	Career            map[string]int `json:"career"`
 	StaticCareerQuest []struct {
 		ID           string `json:"id"`
 		UnlockLv     string `json:"unlock_lv"`

@@ -1,7 +1,5 @@
 package defs
 
-import "hoxy/proxy/defs/types"
-
 // Gun/developCollectList
 type SGunDevelopCollectList struct {
 	LogList []struct {
@@ -10,7 +8,7 @@ type SGunDevelopCollectList struct {
 		LogID       string      `json:"log_id"`
 		UserID      string      `json:"user_id"`
 		DevUID      interface{} `json:"dev_uid"`
-		DevUname    types.Str   `json:"dev_uname"`
+		DevUname    string      `json:"dev_uname"`
 		DevLv       string      `json:"dev_lv"`
 		GunID       string      `json:"gun_id"`
 		Mp          string      `json:"mp"`
