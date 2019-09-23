@@ -209,8 +209,42 @@ func TestSMissionDrawEvent(t *testing.T) {
 	}
 }
 
+func TestSIndexAttendance(t *testing.T) {
+	op := "SIndex/attendance"
+	orig := loadFile(t, "SIndexAttendance")
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SIndexAttendance)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSEquipAdjust(t *testing.T) {
+	op := "SEquip/adjust"
+	orig := []byte(`{"pow":10000,"hit":7500}`)
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SEquipAdjust)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+	orig = []byte(`[]`)
+	ret, marFunc, err = UnMarshal(op, orig)
+	casted, ok = ret.(*defs.SEquipAdjust)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
 func TestSMissionEndTurn(t *testing.T) {
-	t.Log("Testing w/o MissionWinResult,ChangeBelong1,BuildingChangeBelong1")
 	op := "SMission/endTurn"
 	orig := loadFile(t, "SMissionEndTurn.1")
 	ret, marFunc, err := UnMarshal(op, orig)
@@ -221,9 +255,16 @@ func TestSMissionEndTurn(t *testing.T) {
 	if err != nil {
 		testMarshalAndCompare(t, marFunc, casted, orig)
 	}
-	t.Log("Testing w/ MissionWinResult,ChangeBelong1,BuildingChangeBelong1")
-	// Test with missionwinresult
 	orig = loadFile(t, "SMissionEndTurn.2")
+	ret, marFunc, err = UnMarshal(op, orig)
+	casted, ok = ret.(*defs.SMissionEndTurn)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+	orig = loadFile(t, "SMissionEndTurn.3")
 	ret, marFunc, err = UnMarshal(op, orig)
 	casted, ok = ret.(*defs.SMissionEndTurn)
 	if !ok {
@@ -239,6 +280,34 @@ func TestCGunRetireGun(t *testing.T) {
 	orig := []byte(`[1,2,3,4]`)
 	ret, marFunc, err := UnMarshal(op, orig)
 	casted, ok := ret.(*defs.CGunRetireGun)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		t.Error(err)
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSOuthouseEstablishBuild(t *testing.T) {
+	op := "SOuthouse/establish_build"
+	orig := loadFile(t, "SOuthouseEstablish_build")
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SOuthouseEstablish_build)
+	if !ok {
+		t.Error("Failed to cast.")
+	}
+	if err != nil {
+		t.Error(err)
+		testMarshalAndCompare(t, marFunc, casted, orig)
+	}
+}
+
+func TestSFriendList(t *testing.T) {
+	op := "SFriend/list"
+	orig := loadFile(t, "SFriendList")
+	ret, marFunc, err := UnMarshal(op, orig)
+	casted, ok := ret.(*defs.SFriendList)
 	if !ok {
 		t.Error("Failed to cast.")
 	}
