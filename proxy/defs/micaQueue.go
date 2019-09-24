@@ -8,4 +8,7 @@ type SIndexGetUidEnMicaQueue struct {
 	AppGuardID        string `json:"app_guard_id"`
 	RealName          int    `json:"real_name"`
 	AuthenticationURL string `json:"authentication_url"`
+	// ErrMsg and ErrNo are only sent when the servers are down for maintenance.
+	ErrMsg string `json:"Err_Msg"`
+	ErrNo  int    `json:"Err_No"`
 }

@@ -16,6 +16,10 @@ func AuthHandler(kind string, pkt interface{}, pktCtx *goproxy.ProxyCtx) (openID
 		err = fmt.Errorf("Failed to cast %#v into &defs.SMicaQueue")
 		return
 	}
+	if dat.ErrNo != 0 || dat.ErrMsg != "" {
+		err = fmt.Errorf("Failed to login: [%d] %s", dat.ErrNo, dat.ErrMsg)
+		return
+	}
 
 	UID = dat.UID
 	sign = dat.Sign

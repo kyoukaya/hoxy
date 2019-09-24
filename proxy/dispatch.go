@@ -99,7 +99,6 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 		openID, UID, sign, longtoken, err := userauth.AuthHandler(op, pkt, ctx)
 		if err != nil {
 			log.Warnf("AuthHook failed to initialize ctx: %s", err)
-			log.Warnln(ctx.Req.Form)
 			return req, res
 		}
 		proxy.addUser(openID, UID, sign, longtoken)
