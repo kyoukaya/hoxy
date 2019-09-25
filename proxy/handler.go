@@ -16,23 +16,6 @@ const (
 	gameBaseURL = "http://gf-game.sunborngame.com/index.php/1001/"
 )
 
-// HoxyProxy contains the state relevant to the proxy
-type HoxyProxy struct {
-	mutex        *sync.Mutex
-	shuttingDown bool
-	// users contains a mapping of a user's UID in string form to a UserCtx struct
-	// containing the context pertaining to the user.
-	users map[string]*UserCtx
-}
-
-// NewHoxy returns a new initialized HoxyProxy
-func NewHoxy() *HoxyProxy {
-	return &HoxyProxy{
-		mutex:        &sync.Mutex{},
-		shuttingDown: false,
-		users:        make(map[string]*UserCtx)}
-}
-
 // HandleReq proccess an outgoing http(s) request.
 func (proxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	var body []byte
