@@ -73,6 +73,7 @@ type SIndexHome struct {
 		Type           string `json:"type"`
 		LastFinishTime string `json:"last_finish_time"`
 		Count          int    `json:"count"`
+		ID             int    `json:"id"`
 		Receive        int    `json:"receive"`
 	} `json:"squad_data_daily"`
 	BuildCoinFlag int    `json:"build_coin_flag"`

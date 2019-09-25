@@ -63,6 +63,7 @@ type SIndexIndex struct {
 		IsBind                      bool   `json:"is_bind"`
 	} `json:"user_info"`
 	UpgradeActInfo []struct {
+		ID              int    `json:"id"`
 		UserID          string `json:"user_id"`
 		FairyWithUserID string `json:"fairy_with_user_id"`
 		GunWithUserID   string `json:"gun_with_user_id"`
