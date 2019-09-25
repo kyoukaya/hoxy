@@ -1,7 +1,7 @@
 package dollinfo_test
 
 import (
-	"hoxy/utils/dollinfo"
+	"github.com/kyoukaya/hoxy/utils/dollinfo"
 	"testing"
 )
 

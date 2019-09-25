@@ -5,11 +5,11 @@ package constructioninfo
 
 import (
 	"fmt"
-	"hoxy/defs"
-	"hoxy/log"
-	"hoxy/proxy"
-	"hoxy/utils/dollinfo"
-	"hoxy/utils/equipinfo"
+	"github.com/kyoukaya/hoxy/defs"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/proxy"
+	"github.com/kyoukaya/hoxy/utils/dollinfo"
+	"github.com/kyoukaya/hoxy/utils/equipinfo"
 
 	"github.com/elazarl/goproxy"
 )

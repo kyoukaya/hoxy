@@ -1,11 +1,11 @@
 package main
 
 import (
-	"hoxy/proxy"
-	"hoxy/proxy/core/userauth"
+	"github.com/kyoukaya/hoxy/proxy"
+	"github.com/kyoukaya/hoxy/proxy/core/userauth"
 
-	_ "hoxy/mods/constructioninfo"
-	_ "hoxy/mods/packetlogger"
+	_ "github.com/kyoukaya/hoxy/mods/constructioninfo"
+	_ "github.com/kyoukaya/hoxy/mods/packetlogger"
 )
 
 func main() {

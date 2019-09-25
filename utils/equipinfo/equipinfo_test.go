@@ -1,7 +1,7 @@
 package equipinfo_test
 
 import (
-	"hoxy/utils/equipinfo"
+	"github.com/kyoukaya/hoxy/utils/equipinfo"
 	"testing"
 )
 

@@ -4,8 +4,8 @@ package dollinfo
 
 import (
 	"encoding/json"
-	"hoxy/log"
-	"hoxy/utils"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 	"io/ioutil"
 	"os"
 	"sync"

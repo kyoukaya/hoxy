@@ -5,9 +5,9 @@ package packetlogger
 import (
 	"bufio"
 	"fmt"
-	hoxyLog "hoxy/log"
-	"hoxy/proxy"
-	"hoxy/utils"
+	hoxyLog "github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/proxy"
+	"github.com/kyoukaya/hoxy/utils"
 	"log"
 	"os"
 	"time"

@@ -1,8 +1,8 @@
 package proxy
 
 import (
-	"hoxy/authcode"
-	"hoxy/log"
+	"github.com/kyoukaya/hoxy/authcode"
+	"github.com/kyoukaya/hoxy/log"
 	"sync"
 )
 

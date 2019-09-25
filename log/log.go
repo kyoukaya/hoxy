@@ -3,7 +3,7 @@ package log
 import (
 	"bufio"
 	"fmt"
-	"hoxy/utils"
+	"github.com/kyoukaya/hoxy/utils"
 	"io"
 	stdLog "log"
 	"os"

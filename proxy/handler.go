@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"bytes"
-	"hoxy/log"
-	"hoxy/utils"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 	"io/ioutil"
 	"net/http"
 	"strings"

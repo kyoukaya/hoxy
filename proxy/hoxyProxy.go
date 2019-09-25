@@ -1,8 +1,8 @@
 package proxy
 
 import (
-	"hoxy/log"
-	"hoxy/utils"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 	"net/http"
 	"os"
 	"os/signal"

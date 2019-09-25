@@ -19,10 +19,14 @@ Here's an example from the [constructioninfo](https://github.com/kyoukaya/hoxy/b
 func init() {
 	const modName = "Construction Info"
 	initFunc := func(userCtx *proxy.UserCtx) ([]*proxy.PacketHook, proxy.ShutdownCb, error) {
+		dollinfo.Init()
+		equipinfo.Init()
 		mod := &constructInfo{}
 		hooks := []*proxy.PacketHook{
-			proxy.NewPacketHook(modName, "SGun/developGun", 0, false, mod.handleSingle),
-			proxy.NewPacketHook(modName, "SGun/developMultiGun", 0, false, mod.handleMulti),
+			proxy.NewPacketHook(modName, "SGun/developGun", 0, false, mod.handleGunConstruct),
+			proxy.NewPacketHook(modName, "SGun/developMultiGun", 0, false, mod.handleGunConstruct),
+			proxy.NewPacketHook(modName, "SEquip/develop", 0, false, mod.handleEquipConstruct),
+			proxy.NewPacketHook(modName, "SEquip/developMulti", 0, false, mod.handleEquipConstruct),
 		}
 		return hooks, func(bool) {}, nil
 	}

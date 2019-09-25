@@ -1,7 +1,7 @@
 package json
 
 import (
-	"hoxy/defs"
+	"github.com/kyoukaya/hoxy/defs"
 	"reflect"
 	"strings"
 	"sync"

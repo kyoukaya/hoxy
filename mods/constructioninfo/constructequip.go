@@ -2,8 +2,8 @@ package constructioninfo
 
 import (
 	"fmt"
-	"hoxy/defs"
-	"hoxy/utils/equipinfo"
+	"github.com/kyoukaya/hoxy/defs"
+	"github.com/kyoukaya/hoxy/utils/equipinfo"
 	"strings"
 )
 

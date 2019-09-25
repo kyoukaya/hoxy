@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"fmt"
-	"hoxy/log"
-	"hoxy/utils"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 	"regexp"
 	"strings"
 

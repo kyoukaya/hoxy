@@ -1,9 +1,9 @@
 package proxy
 
 import (
-	"hoxy/defs"
-	"hoxy/log"
-	"hoxy/proxy/json"
+	"github.com/kyoukaya/hoxy/defs"
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/proxy/json"
 	"net/http"
 
 	"github.com/elazarl/goproxy"

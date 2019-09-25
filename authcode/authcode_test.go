@@ -1,7 +1,7 @@
 package authcode_test
 
 import (
-	. "hoxy/authcode"
+	. "github.com/kyoukaya/hoxy/authcode"
 	"testing"
 )
 

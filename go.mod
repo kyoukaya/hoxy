@@ -1,4 +1,4 @@
-module hoxy
+module github.com/kyoukaya/hoxy
 
 go 1.12
 
