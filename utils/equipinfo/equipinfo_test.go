@@ -1,8 +1,9 @@
 package equipinfo_test
 
 import (
-	"github.com/kyoukaya/hoxy/utils/equipinfo"
 	"testing"
+
+	"github.com/kyoukaya/hoxy/utils/equipinfo"
 )
 
 func TestEquipinfo(t *testing.T) {
@@ -11,7 +12,7 @@ func TestEquipinfo(t *testing.T) {
 	if equip == nil {
 		t.Fatal("Unable to find equip")
 	}
-	if equip.Name != "BM 3-12X40" {
-		t.Errorf("Expected equip name \"BM 3-12X40\", got %s", equip.Name)
+	if equip.Name != "Ragged Cape" {
+		t.Errorf("Expected equip name \"BM 3-12X40\", got \"%s\"", equip.Name)
 	}
 }

@@ -4,47 +4,28 @@ package equipinfo
 
 import (
 	"encoding/json"
-	"github.com/kyoukaya/hoxy/log"
-	"github.com/kyoukaya/hoxy/utils"
 	"io/ioutil"
 	"os"
 	"sync"
+
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 )
 
 // EquipInfo contains information about a specific equipment type.
 type EquipInfo struct {
-	ID         int `json:"id"`
-	Type       int `json:"type"`
-	Rarity     int `json:"rarity"`
-	Fp         int `json:"fp"`
-	Acc        int `json:"acc"`
-	Eva        int `json:"eva"`
-	Movespeed  int `json:"movespeed"`
-	Rof        int `json:"rof"`
-	Critdmg    int `json:"critdmg"`
-	Crit       int `json:"crit"`
-	Ap         int `json:"ap"`
-	Armor      int `json:"armor"`
-	Nightview  int `json:"nightview"`
-	Rounds     int `json:"rounds"`
-	LevelBonus struct {
-		Fp        int `json:"fp"`
-		Acc       int `json:"acc"`
-		Eva       int `json:"eva"`
-		Movespeed int `json:"movespeed"`
-		Rof       int `json:"rof"`
-		Critdmg   int `json:"critdmg"`
-		Crit      int `json:"crit"`
-		Ap        int `json:"ap"`
-		Armor     int `json:"armor"`
-		Nightview int `json:"nightview"`
-		Rounds    int `json:"rounds"`
-	} `json:"level_bonus"`
-	EnCraftable   bool   `json:"en_craftable"`
-	EnReleased    bool   `json:"en_released"`
-	ConstructTime int    `json:"construct_time"`
-	Name          string `json:"name"`
-	Tooltip       string `json:"tooltip"`
+	ID        int    `json:"id"`
+	Code      string `json:"code"`
+	KrName    string `json:"krName"`
+	Name      string `json:"enName"`
+	JpName    string `json:"jpName"`
+	Rarity    int    `json:"rank"`
+	Type      int    `json:"type"`
+	Category  string `json:"category"`
+	BuildTime int    `json:"buildTime"`
+	Maxlevel  int    `json:"maxlevel"`
+	Company   string `json:"company"`
+	Fitgun    []int  `json:"fitgun,omitempty"`
 }
 
 var (
@@ -105,7 +86,8 @@ func (info *EquipInfo) EquipType() string {
 }
 
 // initEquipInfo loads doll information from the dolls.json file
-// equips.json from https://raw.githubusercontent.com/umang-p/brainlets/master/brainlets/girlsfrontline/static/girlsfrontline/equips.json
+// equips.json from https://raw.githubusercontent.com/jinsung0907/GirlsFrontline-DB/master/data/json/equip.json
+// Used to use the information from brainlets.moe but the IDs they use seem to be arbitrary.
 func initEquipInfo() {
 	log.Infof("Initializing equipment information")
 	f, err := os.Open(utils.PackageRoot + "/data/equips.json")
