@@ -1,11 +1,11 @@
-package proxy_test
+package json_test
 
 import (
 	"bytes"
 	"fmt"
 	"go/importer"
-	. "hoxy/proxy"
-	"hoxy/proxy/defs"
+	"hoxy/defs"
+	. "hoxy/proxy/json"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -55,10 +55,10 @@ func testMarshalAndCompare(t *testing.T, marFunc MarshalFunc, data interface{}, 
 	}
 }
 
-// Test that all defs declared in hoxy/proxy/defs are initialized in proxy.DefMap.
+// Test that all defs declared in hoxy/defs are initialized in proxy.DefMap.
 // Requires source.
 func TestDefExists(t *testing.T) {
-	pkg, err := importer.For("source", nil).Import("hoxy/proxy/defs")
+	pkg, err := importer.For("source", nil).Import("hoxy/defs")
 	if err != nil {
 		t.Errorf("error: %s\n", err.Error())
 		return

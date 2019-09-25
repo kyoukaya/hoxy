@@ -2,7 +2,7 @@ package userauth
 
 import (
 	"fmt"
-	"hoxy/proxy/defs"
+	"hoxy/defs"
 	"strconv"
 
 	"github.com/elazarl/goproxy"

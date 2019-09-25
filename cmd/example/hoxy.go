@@ -2,7 +2,6 @@ package main
 
 import (
 	"hoxy/log"
-	_ "hoxy/mods"
 	"hoxy/proxy"
 	"hoxy/utils"
 	"hoxy/utils/dollinfo"
@@ -10,6 +9,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "hoxy/mods/constructioninfo"
+	_ "hoxy/mods/packetlogger"
 
 	"github.com/elazarl/goproxy"
 )
@@ -54,7 +56,7 @@ func main() {
 	}()
 
 	ipstring := ""
-	if utils.StringFlags("addr")[0] != '"' {
+	if utils.StringFlags("addr")[0] == ':' {
 		ipstring = utils.GetOutboundIP()
 	}
 	log.Infof("Hoxy started on %s%s", ipstring, utils.StringFlags("addr"))

@@ -1,4 +1,4 @@
-package proxy
+package json
 
 import (
 	"bytes"
@@ -38,14 +38,14 @@ type SignCode struct{}
 // MarshalNoDefErr is returned when the packet cannot be unmarshalled into a struct
 // due to the lack of a definition.
 type MarshalNoDefErr struct {
-	op   string
+	Op   string
 	data []byte
 }
 
 // MarshalMismatchErr is returned when the marshalled packet is unable to be marshalled
 // back into its original []byte form.
 type MarshalMismatchErr struct {
-	op        string
+	Op        string
 	original  []byte
 	marshaled []byte
 }
@@ -57,11 +57,11 @@ type MarshalFunc func(v interface{}) ([]byte, error)
 type UnMarshalFunc func(op string, data []byte) (interface{}, error)
 
 func (e MarshalNoDefErr) Error() string {
-	return fmt.Sprintf("MarshalNoDefErr: no defs found for %s\n%s", e.op, e.data)
+	return fmt.Sprintf("MarshalNoDefErr: no defs found for %s\n%s", e.Op, e.data)
 }
 
 func (e MarshalMismatchErr) Error() string {
-	return fmt.Sprintf("MarshalMismatchErr: mismatch on data for %s", e.op)
+	return fmt.Sprintf("MarshalMismatchErr: mismatch on data for %s", e.Op)
 }
 
 var omType = reflect.TypeOf(orderedmap.OrderedMap{})

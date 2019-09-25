@@ -1,9 +1,10 @@
 package proxy
 
 import (
+	"hoxy/defs"
 	"hoxy/log"
-	"hoxy/proxy/defs"
-	"hoxy/proxy/userauth"
+	"hoxy/proxy/core/userauth"
+	"hoxy/proxy/json"
 	"net/http"
 
 	"github.com/elazarl/goproxy"
@@ -71,15 +72,15 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 		}
 	}
 
-	pkt, _, unmarshalErr := UnMarshal(op, dec)
+	pkt, _, unmarshalErr := json.UnMarshal(op, dec)
 	if unmarshalErr != nil {
 		switch unmarshalErr.(type) {
-		case MarshalNoDefErr:
-			e := unmarshalErr.(MarshalNoDefErr)
-			log.Warnf("No definitions found for %s", e.op)
-		case MarshalMismatchErr:
-			e := unmarshalErr.(MarshalMismatchErr)
-			log.Warnf("Marshal->Unmarshal mismatch for %s", e.op)
+		case json.MarshalNoDefErr:
+			e := unmarshalErr.(json.MarshalNoDefErr)
+			log.Warnf("No definitions found for %s", e.Op)
+		case json.MarshalMismatchErr:
+			e := unmarshalErr.(json.MarshalMismatchErr)
+			log.Warnf("Marshal->Unmarshal mismatch for %s", e.Op)
 		default:
 			log.Warnln(unmarshalErr)
 			return req, res

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"hoxy/log"
 	"hoxy/proxy"
-	"hoxy/proxy/defs"
+	"hoxy/defs"
 	"hoxy/utils/dollinfo"
 	"strconv"
 	"strings"

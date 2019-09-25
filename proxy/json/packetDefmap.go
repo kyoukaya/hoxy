@@ -1,7 +1,7 @@
-package proxy
+package json
 
 import (
-	"hoxy/proxy/defs"
+	"hoxy/defs"
 	"reflect"
 	"strings"
 	"sync"
@@ -11,7 +11,6 @@ import (
 var DefMapLock = &sync.Mutex{}
 
 // DefMap provides a mapping of an op string to its struct type where possible.
-// TODO: defer init
 var DefMap = func() map[string]reflect.Type {
 	literals := []interface{}{
 		defs.CDormGet_build_coin{},

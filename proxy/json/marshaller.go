@@ -1,4 +1,4 @@
-package proxy
+package json
 
 import (
 	"bytes"
@@ -208,7 +208,7 @@ func marshal(ref, data interface{}) ([]byte, error) {
 				// Unroll ptr
 				return marshal(ref, pValue.Interface())
 			default:
-				return []byte("null"), fmt.Errorf("marshal: unexpected kind in definition %#v", dataT.Kind().String())
+				return []byte("null"), fmt.Errorf("marshal: unexpected kind in definition %s, when an OrderedMap is in the reference", dataT.Kind().String())
 			}
 
 			// Iterate over the reference keys in order
