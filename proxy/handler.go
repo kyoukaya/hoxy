@@ -12,15 +12,11 @@ import (
 	"github.com/elazarl/goproxy"
 )
 
-const (
-	gameBaseURL = "http://gf-game.sunborngame.com/index.php/1001/"
-)
-
 // HandleReq proccess an outgoing http(s) request.
-func (proxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+func (hoxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	var body []byte
 
-	if proxy.shuttingDown {
+	if hoxy.shuttingDown {
 		return nil, nil
 	}
 
@@ -35,7 +31,7 @@ func (proxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*ht
 	reqCtx := &DispatchContext{}
 	ctx.UserData = reqCtx
 	// Block telemetry requests
-	if telemetryFilter.MatchString(req.Host) {
+	if hoxy.telemetryFilter.MatchString(req.Host) {
 		log.Verbosef("==== Rejecting %v", req.Host)
 		// Use the UserData field as a flag to indicate to the response handler that the
 		// request that generated the response was blocked.
@@ -51,12 +47,12 @@ func (proxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*ht
 	req.ParseForm()
 	req.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 	// Handle game traffic
-	if strings.HasPrefix(req.URL.String(), gameBaseURL) {
-		return proxy.dispatchReq(req, ctx)
+	if strings.HasPrefix(req.URL.String(), hoxy.baseURL) {
+		return hoxy.dispatchReq(req, ctx)
 	}
 	// Non-game traffic
 	// Block some of the uninteresting requests to prevent them from flooding our logs.
-	if logFilter.MatchString(reqURL) {
+	if hoxy.logFilter.MatchString(reqURL) {
 		log.Verbosef(">>>> %s\n%v\n%s", reqURL, utils.SprintHeaders(req.Header), body)
 	} else {
 		log.Infof(">>>> %s\n%v\n%s", reqURL, utils.SprintHeaders(req.Header), body)
@@ -65,10 +61,10 @@ func (proxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*ht
 }
 
 // HandleResp processes an incoming http(s) response.
-func (proxy *HoxyProxy) HandleResp(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
+func (hoxy *HoxyProxy) HandleResp(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 	var body []byte
 
-	if proxy.shuttingDown {
+	if hoxy.shuttingDown {
 		return nil
 	}
 
@@ -94,12 +90,12 @@ func (proxy *HoxyProxy) HandleResp(resp *http.Response, ctx *goproxy.ProxyCtx) *
 	// Reading from the body consumes all the bytes, so we need to save back a copy.
 	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 	// Game traffic
-	if strings.HasPrefix(reqURL, gameBaseURL) {
-		return proxy.dispatchRes(body, resp, ctx)
+	if strings.HasPrefix(reqURL, hoxy.baseURL) {
+		return hoxy.dispatchRes(body, resp, ctx)
 	}
 	// Non-game traffic
 	// Block some of the uninteresting requests to prevent them from flooding our logs.
-	if logFilter.MatchString(reqURL) {
+	if hoxy.logFilter.MatchString(reqURL) {
 		log.Verbosef("<<<< %s\n%s", reqURL, body)
 	} else {
 		log.Infof("<<<< %s\n%s", reqURL, body)
@@ -109,9 +105,9 @@ func (proxy *HoxyProxy) HandleResp(resp *http.Response, ctx *goproxy.ProxyCtx) *
 
 // Shutdown stops processing all packets captured by the proxy and calls Shutdown
 // on all modules for all users.
-func (proxy *HoxyProxy) Shutdown() {
-	proxy.shuttingDown = true
-	for _, user := range proxy.users {
+func (hoxy *HoxyProxy) Shutdown() {
+	hoxy.shuttingDown = true
+	for _, user := range hoxy.users {
 		for _, cb := range user.shutdownCBs {
 			cb(true)
 		}
@@ -119,26 +115,26 @@ func (proxy *HoxyProxy) Shutdown() {
 }
 
 // GetUser returns a UserCtx for the specified UID
-func (proxy *HoxyProxy) GetUser(UID string) *UserCtx {
-	proxy.mutex.Lock()
-	defer proxy.mutex.Unlock()
-	return proxy.users[UID]
+func (hoxy *HoxyProxy) GetUser(UID string) *UserCtx {
+	hoxy.mutex.Lock()
+	defer hoxy.mutex.Unlock()
+	return hoxy.users[UID]
 }
 
 // addUser records a user's information indexed by their UID, if a record belonging to
 // the specified UID already exists, its hooks will be shutdown and the record will be overwritten.
-func (proxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
-	proxy.mutex.Lock()
-	defer proxy.mutex.Unlock()
+func (hoxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
+	hoxy.mutex.Lock()
+	defer hoxy.mutex.Unlock()
 
-	if user, exists := proxy.users[UID]; exists {
+	if user, exists := hoxy.users[UID]; exists {
 		log.Infof("%s reconnecting. Shutting down mods.", UID)
 		for _, cb := range user.shutdownCBs {
 			cb(false)
 		}
 	}
 
-	proxy.users[UID] = &UserCtx{
+	hoxy.users[UID] = &UserCtx{
 		mutex:     &sync.Mutex{},
 		Key:       sign,
 		Longtoken: longtoken,

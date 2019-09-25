@@ -3,18 +3,17 @@ package proxy
 import (
 	"hoxy/defs"
 	"hoxy/log"
-	"hoxy/proxy/core/userauth"
 	"hoxy/proxy/json"
 	"net/http"
 
 	"github.com/elazarl/goproxy"
 )
 
-func (proxy *HoxyProxy) dispatchReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+func (hoxy *HoxyProxy) dispatchReq(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	// reqID := req.FormValue("req_id")
 	reqURL := req.URL.String()
 	op := "C" + reqURL[46:]
-	userCtx := proxy.GetUser(req.FormValue("uid"))
+	userCtx := hoxy.GetUser(req.FormValue("uid"))
 	reqCtx := GetDispatchContext(ctx)
 	reqCtx.RequestOp = op
 
@@ -49,15 +48,15 @@ func (proxy *HoxyProxy) dispatchReq(req *http.Request, ctx *goproxy.ProxyCtx) (*
 	if isSignCode {
 		dec = nil
 	}
-	return proxy.dispatch(op, dec, ctx)
+	return hoxy.dispatch(op, dec, ctx)
 }
 
-func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	var unmarshalErr error
 	var req = ctx.Req
 	var res = ctx.Resp
 
-	user := proxy.GetUser(req.FormValue("uid"))
+	user := hoxy.GetUser(req.FormValue("uid"))
 	// Run raw hooks
 	if user != nil {
 		if hooks, ok := user.RawHooks["*"]; ok {
@@ -97,19 +96,19 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 
 	// Run auth hook if SIndex/getUidEnMicaQueue is unmarshalled.
 	if _, ok := pkt.(*defs.SIndexGetUidEnMicaQueue); ok && unmarshalErr == nil {
-		openID, UID, sign, longtoken, err := userauth.AuthHandler(op, pkt, ctx)
+		openID, UID, sign, longtoken, err := hoxy.authHandler(op, pkt, ctx)
 		if err != nil {
 			log.Warnf("AuthHook failed to initialize ctx: %s", err)
 			return req, res
 		}
-		proxy.addUser(openID, UID, sign, longtoken)
+		hoxy.addUser(openID, UID, sign, longtoken)
 		// UserCtx should be initialized by the AuthHook hook
-		user := proxy.GetUser(pkt.(*defs.SIndexGetUidEnMicaQueue).UID)
+		user := hoxy.GetUser(pkt.(*defs.SIndexGetUidEnMicaQueue).UID)
 		user.initMods(modules)
 	}
 
 	// Run packet hooks if user is initialized
-	if user := proxy.GetUser(ctx.Req.FormValue("uid")); user != nil {
+	if user := hoxy.GetUser(ctx.Req.FormValue("uid")); user != nil {
 		// Run wildcard hooks
 		if hooks, ok := user.Hooks["*"]; ok {
 			for _, hook := range hooks {
@@ -133,7 +132,7 @@ func (proxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (
 	return req, res
 }
 
-func (proxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
+func (hoxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 	var err error
 	var dec []byte
 	if len(body) == 0 {
@@ -142,7 +141,7 @@ func (proxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *gopro
 
 	op := "S" + ctx.Req.URL.String()[46:]
 	if body[0] == '#' {
-		user := proxy.GetUser(ctx.Req.FormValue("uid"))
+		user := hoxy.GetUser(ctx.Req.FormValue("uid"))
 		dec, _, err = user.Decode(string(body))
 		if err != nil {
 			log.Warnf("<<## [%s] failed to decode for UID: %s\n", op, ctx.Req.Form.Get("uid"))
@@ -154,7 +153,7 @@ func (proxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *gopro
 		// dispatch packets like SIndex/index which are not encrypted
 		dec = body
 	}
-	_, resp = proxy.dispatch(op, dec, ctx)
+	_, resp = hoxy.dispatch(op, dec, ctx)
 
 	return resp
 }

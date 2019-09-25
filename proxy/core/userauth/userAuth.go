@@ -8,12 +8,13 @@ import (
 	"github.com/elazarl/goproxy"
 )
 
-var incompletePktErr = fmt.Errorf("Malformed or incomplete packet")
+var errIncompletePkt = fmt.Errorf("Malformed or incomplete packet")
 
+// AuthHandler handles user authentication for the global server
 func AuthHandler(kind string, pkt interface{}, pktCtx *goproxy.ProxyCtx) (openID int, UID, sign, longtoken string, err error) {
 	dat, ok := pkt.(*defs.SIndexGetUidEnMicaQueue)
 	if !ok {
-		err = fmt.Errorf("Failed to cast %#v into &defs.SMicaQueue")
+		err = fmt.Errorf("Failed to cast %#v into &defs.SMicaQueue", pkt)
 		return
 	}
 	if dat.ErrNo != 0 || dat.ErrMsg != "" {
@@ -26,7 +27,7 @@ func AuthHandler(kind string, pkt interface{}, pktCtx *goproxy.ProxyCtx) (openID
 
 	openidStr, ok := pktCtx.Req.Form["openid"]
 	if !ok {
-		err = incompletePktErr
+		err = errIncompletePkt
 		return
 	}
 	openID, err = strconv.Atoi(openidStr[0])
@@ -37,7 +38,7 @@ func AuthHandler(kind string, pkt interface{}, pktCtx *goproxy.ProxyCtx) (openID
 
 	longtokenSlice, ok := pktCtx.Req.Form["sid"]
 	if !ok {
-		err = incompletePktErr
+		err = errIncompletePkt
 		return
 	}
 	longtoken = longtokenSlice[0]
