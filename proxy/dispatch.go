@@ -114,7 +114,8 @@ func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*
 			for _, hook := range hooks {
 				_, err := hook.Handle(op, pkt, user, ctx)
 				if err != nil {
-					log.Warnln(err)
+					log.Warnf("dispatch: error occured while running hook %s on packet %s: %s\n"+
+						"data: %s", hook.name, op, err.Error(), dec)
 				}
 			}
 		}
@@ -123,7 +124,8 @@ func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*
 			for _, hook := range hooks {
 				_, err := hook.Handle(op, pkt, user, ctx)
 				if err != nil {
-					log.Warnln(err)
+					log.Warnf("dispatch: error occured while running hook %s on packet %s: %s\n"+
+						"data: %s", hook.name, op, err.Error(), dec)
 				}
 			}
 		}

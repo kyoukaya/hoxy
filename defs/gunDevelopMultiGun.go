@@ -14,7 +14,7 @@ type CGunDevelopMultiGun struct {
 
 type SGunDevelopMultiGun struct {
 	GunIds []struct {
-		ID   string `json:"id"`
-		Slot int    `json:"slot"`
+		ID   int `json:"id"`
+		Slot int `json:"slot"`
 	} `json:"gun_ids"`
 }

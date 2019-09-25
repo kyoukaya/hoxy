@@ -3,7 +3,6 @@ package proxy
 import (
 	"hoxy/log"
 	"hoxy/utils"
-	"hoxy/utils/dollinfo"
 	"net/http"
 	"os"
 	"os/signal"
@@ -47,7 +46,6 @@ func NewHoxy(baseURL string, authHandler AuthHandler, filters Filters) *HoxyProx
 	log.InitLogger(true, true, "")
 	// TODO: Init the standard logger based on flags.
 
-	dollinfo.InitDollInfo()
 	server := goproxy.NewProxyHttpServer()
 
 	hoxy := &HoxyProxy{

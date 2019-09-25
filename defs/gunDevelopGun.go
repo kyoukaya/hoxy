@@ -11,5 +11,5 @@ type CGunDevelopGun struct {
 }
 
 type SGunDevelopGun struct {
-	GunID string `json:"gun_id"`
+	GunID int `json:"gun_id"`
 }
