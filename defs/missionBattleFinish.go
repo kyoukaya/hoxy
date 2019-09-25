@@ -74,13 +74,28 @@ type SMissionBattleFinish struct {
 	FreeExp                int           `json:"free_exp"`
 	ChangeBelong           []interface{} `json:"change_belong"`
 	BuildingDefenderChange []interface{} `json:"building_defender_change"`
-	MissionWinResult       []interface{} `json:"mission_win_result"`
-	Seed                   int           `json:"seed"`
-	FavorChange            map[int]int   `json:"favor_change"`
-	Type5Score             string        `json:"type5_score"`
-	AllyInstanceTransform  []interface{} `json:"ally_instance_transform"`
-	AllyInstanceBetray     []interface{} `json:"ally_instance_betray"`
-	MissionControl         struct {
+	MissionWinResult       *struct {
+		Rank              string      `json:"rank"`
+		Medal4            int         `json:"medal4"`
+		Open              map[int]int `json:"open"`
+		Item              string      `json:"item"`
+		GunsInCoinMission []struct {
+			ID   int `json:"id"`
+			Life int `json:"life"`
+		} `json:"guns_in_coinMission"`
+		MissionInfo struct {
+			Turn                    int `json:"turn"`
+			EnemydieNum             int `json:"enemydie_num"`
+			EnemydieNumKillbyfriend int `json:"enemydie_num_killbyfriend"`
+			GundieNum               int `json:"gundie_num"`
+		} `json:"mission_info"`
+	} `json:"mission_win_result"`
+	Seed                  int           `json:"seed"`
+	FavorChange           map[int]int   `json:"favor_change"`
+	Type5Score            string        `json:"type5_score"`
+	AllyInstanceTransform []interface{} `json:"ally_instance_transform"`
+	AllyInstanceBetray    []interface{} `json:"ally_instance_betray"`
+	MissionControl        struct {
 		Num1 int `json:"1"`
 		Num2 int `json:"2"`
 		Num3 int `json:"3"`

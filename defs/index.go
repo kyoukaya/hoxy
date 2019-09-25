@@ -221,14 +221,12 @@ type SIndexIndex struct {
 		UserID int  `json:"user_id"`
 		IsRead bool `json:"is_read"`
 	} `json:"skin_with_user_info"`
-	EventInfo struct {
-		Num315 struct {
-			ID        string `json:"id"`
-			Code      string `json:"code"`
-			Condition string `json:"condition"`
-			StartTime int    `json:"start_time"`
-			EndTime   int    `json:"end_time"`
-		} `json:"315"`
+	EventInfo map[int]struct {
+		ID        string `json:"id"`
+		Code      string `json:"code"`
+		Condition string `json:"condition"`
+		StartTime int    `json:"start_time"`
+		EndTime   int    `json:"end_time"`
 	} `json:"event_info"`
 	DormScoreInfo map[int]struct {
 		UserID string `json:"user_id"`

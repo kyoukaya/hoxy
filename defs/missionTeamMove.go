@@ -9,6 +9,12 @@ type CMissionTeamMove struct {
 }
 
 type SMissionTeamMove struct {
+	// Fields that only appear when resources are gained when a random node is triggered.
+	Mp   int `json:"mp"`
+	Ammo int `json:"ammo"`
+	Mre  int `json:"mre"`
+	Part int `json:"part"`
+
 	BuildingDefenderChange []interface{} `json:"building_defender_change"`
 	Ap                     int           `json:"ap"`
 	Type5Score             string        `json:"type5_score"`
