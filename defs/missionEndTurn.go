@@ -38,13 +38,22 @@ type SMissionEndTurn struct {
 		HostageHp       int `json:"hostage_hp"`
 		SquadInstanceID int `json:"squad_instance_id"`
 	} `json:"enemy_move"`
-	AllyMove              []interface{} `json:"ally_move"`
-	AllyBattle            []interface{} `json:"ally_battle"`
-	Type5Score            string        `json:"type5_score"`
-	FairySkillReturn      []interface{} `json:"fairy_skill_return"`
-	FairySkillPerform     []interface{} `json:"fairy_skill_perform"`
-	FairySkillOnSpot      []interface{} `json:"fairy_skill_on_spot"`
-	FairySkillOnTeam      []interface{} `json:"fairy_skill_on_team"`
+	AllyMove          []interface{} `json:"ally_move"`
+	AllyBattle        []interface{} `json:"ally_battle"`
+	Type5Score        string        `json:"type5_score"`
+	FairySkillReturn  []interface{} `json:"fairy_skill_return"`
+	FairySkillPerform []interface{} `json:"fairy_skill_perform"`
+	FairySkillOnSpot  []interface{} `json:"fairy_skill_on_spot"`
+	FairySkillOnTeam  map[int]map[int]struct {
+		TeamID               int `json:"team_id"`
+		BuffID               int `json:"buff_id"`
+		FairyTeamID          int `json:"fairy_team_id"`
+		BuildingSpotID       int `json:"building_spot_id"`
+		SquadInstanceID      int `json:"squad_instance_id"`
+		StartTurn            int `json:"start_turn"`
+		BattleCount          int `json:"battle_count"`
+		MissionSkillConfigID int `json:"mission_skill_config_id"`
+	} `json:"fairy_skill_on_team"`
 	FairySkillOnEnemy     []interface{} `json:"fairy_skill_on_enemy"`
 	FairySkillOnSquad     []interface{} `json:"fairy_skill_on_squad"`
 	AllyInstanceTransform []interface{} `json:"ally_instance_transform"`

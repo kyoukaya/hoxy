@@ -1,10 +1,11 @@
 package json
 
 import (
-	"github.com/kyoukaya/hoxy/defs"
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/kyoukaya/hoxy/defs"
 )
 
 // DefMapLock exposes a mutex to allow for safe concurrent access of DefMap.
@@ -14,6 +15,7 @@ var DefMapLock = &sync.Mutex{}
 var DefMap = func() map[string]reflect.Type {
 	literals := []interface{}{
 		defs.CDormGet_build_coin{},
+		defs.CDormGiftToGun{},
 		defs.CDormReceive_favor{},
 		defs.CEquipAdjust{},
 		defs.CEquipDevelop{},
@@ -28,6 +30,8 @@ var DefMap = func() map[string]reflect.Type {
 		defs.CFairyFinishUpgrade{},
 		defs.CFairySkillUpgrade{},
 		defs.CFairyTeamFairy{},
+		defs.CFriendMessageadd{},
+		defs.CFriendMessageget{},
 		defs.CFriendPraise{},
 		defs.CFriendUsercard{},
 		defs.CFriendVisit{},
@@ -47,6 +51,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.CGunSetPosition{},
 		defs.CGunSkillUpgrade{},
 		defs.CGunTeamGun{},
+		defs.CIndexCrashLog{},
 		defs.CIndexGetMailList{},
 		defs.CIndexGetResourceInMail{},
 		defs.CIndexGuide{},
@@ -56,6 +61,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.CMissionBattleFinish{},
 		defs.CMissionCoinBattleFinish{},
 		defs.CMissionEndTrialExercise{},
+		defs.CMissionFairySkillPerform{},
 		defs.CMissionFriendTeamAi{},
 		defs.CMissionReinforceFriendTeam{},
 		defs.CMissionReinforceTeam{},
@@ -67,7 +73,11 @@ var DefMap = func() map[string]reflect.Type {
 		defs.COperationStartOperation{},
 		defs.COuthouseEstablish_build_finish{},
 		defs.COuthouseEstablish_build{},
+		defs.SBingoRandom_num{},
+		defs.SBingoTasklists{},
+		defs.SBingoUser_bingo_info{},
 		defs.SDormGet_build_coin{},
+		defs.SDormGiftToGun{},
 		defs.SDormKalinaFavor(0),
 		defs.SDormReceive_favor{},
 		defs.SDormShare{},
@@ -89,6 +99,8 @@ var DefMap = func() map[string]reflect.Type {
 		defs.SFriendApplylist{},
 		defs.SFriendDormInfo{},
 		defs.SFriendList{},
+		defs.SFriendMessageadd{},
+		defs.SFriendMessageget{},
 		defs.SFriendMessagelist{},
 		defs.SFriendPraise{},
 		defs.SFriendRandomList{},
@@ -112,6 +124,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.SGunSkillUpgrade(0),
 		defs.SGunTeamGun(0),
 		defs.SIndexAttendance{},
+		defs.SIndexCrashLog(0),
 		defs.SIndexDownloadSuccess(0),
 		defs.SIndexGetMailList{},
 		defs.SIndexGetResourceInMail{},
@@ -130,6 +143,7 @@ var DefMap = func() map[string]reflect.Type {
 		defs.SMissionEndEnemyTurn{},
 		defs.SMissionEndTrialExercise{},
 		defs.SMissionEndTurn{},
+		defs.SMissionFairySkillPerform{},
 		defs.SMissionFriendTeamAi(0),
 		defs.SMissionFriendTeamMove{},
 		defs.SMissionReinforceFriendTeam{},
