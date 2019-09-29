@@ -14,6 +14,8 @@ var DefMapLock = &sync.Mutex{}
 // DefMap provides a mapping of an op string to its struct type where possible.
 var DefMap = func() map[string]reflect.Type {
 	literals := []interface{}{
+		defs.CAutomissionFinishAutomission{},
+		defs.CAutomissionStartAutomission{},
 		defs.CDormGet_build_coin{},
 		defs.CDormGiftToGun{},
 		defs.CDormReceive_favor{},
@@ -73,6 +75,8 @@ var DefMap = func() map[string]reflect.Type {
 		defs.COperationStartOperation{},
 		defs.COuthouseEstablish_build_finish{},
 		defs.COuthouseEstablish_build{},
+		defs.SAutomissionFinishAutomission{},
+		defs.SAutomissionStartAutomission(0),
 		defs.SBingoRandom_num{},
 		defs.SBingoTasklists{},
 		defs.SBingoUser_bingo_info{},
