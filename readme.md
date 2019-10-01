@@ -13,7 +13,7 @@ Use `go run cmd/example/hoxy.go` to start the proxy server up, and then direct y
 
 Each module should initialize itself by calling `proxy.RegisterMod(modName, initFunc)` at program start up, either in the `init()` function or in the global scope.
 The init function will be called when a user authenticates with the game server to set up the module for that user.
-Here's an example from the [constructioninfo](https://github.com/kyoukaya/hoxy/blob/master/mods/constructioninfo/constructinfo.go) mod:
+Here's an example from the [constructioninfo](https://github.com/kyoukaya/hoxy/blob/master/mods/constructioninfo/constructioninfo.go) mod:
 
 ```go
 func init() {
