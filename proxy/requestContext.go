@@ -16,7 +16,8 @@ type DispatchContext struct {
 	RequestOp   string
 	// An error that occurred during request unmarshalling, if any
 	RequestUnmarshalErr error
-	// Contains the unmarshalled request packet. Nil if DispatchContext is for a request.
+	// Contains the unmarshalled request packet. Nil if DispatchContext is for a request
+	// or if RequestUnmarshalErr != nil
 	RequestPkt interface{}
 	// An error that occurred during response unmarshalling, if any
 	ResponseUnmarshalErr error

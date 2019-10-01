@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"go/importer"
-	"github.com/kyoukaya/hoxy/defs"
-	. "github.com/kyoukaya/hoxy/proxy/json"
 	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
 	"unicode"
+
+	"github.com/kyoukaya/hoxy/defs"
+	. "github.com/kyoukaya/hoxy/proxy/json"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 )

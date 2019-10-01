@@ -239,5 +239,5 @@ func marshal(ref, data interface{}) ([]byte, error) {
 		}
 	}
 	// this shouldn't happen
-	return ret, nil
+	return ret, fmt.Errorf("marshal: unknown error on data:%#v\nref:%#v", data, ref)
 }

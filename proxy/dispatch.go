@@ -1,10 +1,12 @@
 package proxy
 
 import (
+	"net/http"
+	"reflect"
+
 	"github.com/kyoukaya/hoxy/defs"
 	"github.com/kyoukaya/hoxy/log"
 	"github.com/kyoukaya/hoxy/proxy/json"
-	"net/http"
 
 	"github.com/elazarl/goproxy"
 )
@@ -48,46 +50,72 @@ func (hoxy *HoxyProxy) dispatchReq(req *http.Request, ctx *goproxy.ProxyCtx) (*h
 	if isSignCode {
 		dec = nil
 	}
-	return hoxy.dispatch(op, dec, ctx)
+
+	_ = hoxy.dispatch(op, dec, ctx)
+
+	return req, nil
 }
 
-func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+// Checks the return values of a PacketHook.Handle call and returns the return value
+// of the hook if there are no errors. Otherwise it returns the original data.
+func checkHookErr(hook *PacketHook, data interface{}, err error, orig interface{}) interface{} {
+	if err != nil {
+		log.Warnln(err)
+	}
+	// Check for simple type equality between data and orig by their names
+	dataT := reflect.TypeOf(data).Name()
+	origT := reflect.TypeOf(orig).Name()
+	ok := true
+	if dataT != origT {
+		log.Warnf("%s was expected to return %s but returned %s", hook.name, origT, dataT)
+		ok = false
+	}
+	if err != nil || !ok {
+		return orig
+	}
+	return data
+}
+
+func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) []byte {
 	var unmarshalErr error
-	var req = ctx.Req
-	var res = ctx.Resp
+	req := ctx.Req
 
 	user := hoxy.GetUser(req.FormValue("uid"))
 	// Run raw hooks
 	if user != nil {
 		if hooks, ok := user.RawHooks["*"]; ok {
 			for _, hook := range hooks {
-				hook.Handle(op, dec, user, ctx)
+				ret, err := hook.Handle(op, dec, user, ctx)
+				dec = checkHookErr(hook, ret, err, dec).([]byte)
 			}
 		}
 		if hooks, ok := user.RawHooks[op]; ok {
 			for _, hook := range hooks {
-				hook.Handle(op, dec, user, ctx)
+				ret, err := hook.Handle(op, dec, user, ctx)
+				dec = checkHookErr(hook, ret, err, dec).([]byte)
 			}
 		}
 	}
 
-	pkt, _, unmarshalErr := json.UnMarshal(op, dec)
+	pkt, marFunc, unmarshalErr := json.UnMarshal(op, dec)
 	if unmarshalErr != nil {
 		switch unmarshalErr.(type) {
 		case json.MarshalNoDefErr:
 			e := unmarshalErr.(json.MarshalNoDefErr)
 			log.Warnf("No definitions found for %s", e.Op)
+			return dec
 		case json.MarshalMismatchErr:
 			e := unmarshalErr.(json.MarshalMismatchErr)
 			log.Warnf("Marshal->Unmarshal mismatch for %s", e.Op)
 		default:
 			log.Warnln(unmarshalErr)
-			return req, res
+			return dec
 		}
 	}
-	// Include the unmarshalled packet into the request context if successfully unmarshalled
+
 	dispatchCtx := GetDispatchContext(ctx)
 	if ctx.Resp == nil {
+		// Include the unmarshalled packet into the request context if successfully unmarshalled
 		dispatchCtx.RequestUnmarshalErr = unmarshalErr
 		dispatchCtx.RequestPkt = pkt
 	} else {
@@ -99,11 +127,9 @@ func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*
 		openID, UID, sign, longtoken, err := hoxy.authHandler(op, pkt, ctx)
 		if err != nil {
 			log.Warnf("AuthHook failed to initialize ctx: %s", err)
-			return req, res
+			return dec
 		}
-		hoxy.addUser(openID, UID, sign, longtoken)
-		// UserCtx should be initialized by the AuthHook hook
-		user := hoxy.GetUser(pkt.(*defs.SIndexGetUidEnMicaQueue).UID)
+		user := hoxy.addUser(openID, UID, sign, longtoken)
 		user.initMods(modules)
 	}
 
@@ -112,26 +138,29 @@ func (hoxy *HoxyProxy) dispatch(op string, dec []byte, ctx *goproxy.ProxyCtx) (*
 		// Run wildcard hooks
 		if hooks, ok := user.Hooks["*"]; ok {
 			for _, hook := range hooks {
-				_, err := hook.Handle(op, pkt, user, ctx)
-				if err != nil {
-					log.Warnf("dispatch: error occured while running hook %s on packet %s: %s\n"+
-						"data: %s", hook.name, op, err.Error(), dec)
-				}
+				ret, err := hook.Handle(op, pkt, user, ctx)
+				pkt = checkHookErr(hook, ret, err, pkt)
 			}
 		}
 		// Run normal hooks for op
 		if hooks, ok := user.Hooks[op]; ok {
 			for _, hook := range hooks {
-				_, err := hook.Handle(op, pkt, user, ctx)
-				if err != nil {
-					log.Warnf("dispatch: error occured while running hook %s on packet %s: %s\n"+
-						"data: %s", hook.name, op, err.Error(), dec)
-				}
+				ret, err := hook.Handle(op, pkt, user, ctx)
+				pkt = checkHookErr(hook, ret, err, pkt)
 			}
 		}
 	}
 
-	return req, res
+	if marFunc == nil {
+		return dec
+	}
+	marBytes, err := marFunc(pkt)
+	if err != nil {
+		log.Warnln(err)
+		return dec
+	}
+
+	return marBytes
 }
 
 func (hoxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
@@ -155,7 +184,8 @@ func (hoxy *HoxyProxy) dispatchRes(body []byte, resp *http.Response, ctx *goprox
 		// dispatch packets like SIndex/index which are not encrypted
 		dec = body
 	}
-	_, resp = hoxy.dispatch(op, dec, ctx)
+
+	_ = hoxy.dispatch(op, dec, ctx)
 
 	return resp
 }

@@ -229,7 +229,7 @@ func UnMarshal(op string, data []byte) (interface{}, MarshalFunc, error) {
 	var err error
 
 	if data == nil {
-		return &SignCode{}, nil, nil
+		return &SignCode{}, func(interface{}) ([]byte, error) { return data, nil }, nil
 	}
 
 	ret, marFunc, err := unMarshalfunc(op, data)

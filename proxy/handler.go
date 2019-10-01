@@ -2,12 +2,13 @@ package proxy
 
 import (
 	"bytes"
-	"github.com/kyoukaya/hoxy/log"
-	"github.com/kyoukaya/hoxy/utils"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 
 	"github.com/elazarl/goproxy"
 )
@@ -23,7 +24,7 @@ func (hoxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*htt
 	defer func() {
 		log.Flush()
 		if rec := recover(); rec != nil {
-			log.Infoln(body)
+			log.Infof("%#v", body)
 			panic(rec)
 		}
 	}()
@@ -123,7 +124,7 @@ func (hoxy *HoxyProxy) GetUser(UID string) *UserCtx {
 
 // addUser records a user's information indexed by their UID, if a record belonging to
 // the specified UID already exists, its hooks will be shutdown and the record will be overwritten.
-func (hoxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
+func (hoxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) *UserCtx {
 	hoxy.mutex.Lock()
 	defer hoxy.mutex.Unlock()
 
@@ -134,7 +135,7 @@ func (hoxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
 		}
 	}
 
-	hoxy.users[UID] = &UserCtx{
+	new := &UserCtx{
 		mutex:     &sync.Mutex{},
 		Key:       sign,
 		Longtoken: longtoken,
@@ -143,4 +144,7 @@ func (hoxy *HoxyProxy) addUser(openID int, UID, sign, longtoken string) {
 		RawHooks:  make(map[string][]*PacketHook),
 		Hooks:     make(map[string][]*PacketHook),
 	}
+
+	hoxy.users[UID] = new
+	return new
 }
