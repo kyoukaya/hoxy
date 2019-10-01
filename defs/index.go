@@ -405,6 +405,7 @@ type SIndexIndex struct {
 		Type           string `json:"type"`
 		LastFinishTime string `json:"last_finish_time"`
 		Count          int    `json:"count"`
+		ID             int    `json:"id"`
 		Receive        int    `json:"receive"`
 	} `json:"squad_data_daily"`
 	SquadWithUserInfo   []interface{} `json:"squad_with_user_info"`
