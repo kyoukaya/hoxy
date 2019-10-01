@@ -85,7 +85,7 @@ func (info *EquipInfo) EquipType() string {
 	}
 }
 
-// initEquipInfo loads doll information from the dolls.json file
+// initEquipInfo loads equipment information from the equips.json file
 // equips.json from https://raw.githubusercontent.com/jinsung0907/GirlsFrontline-DB/master/data/json/equip.json
 // Used to use the information from brainlets.moe but the IDs they use seem to be arbitrary.
 func initEquipInfo() {

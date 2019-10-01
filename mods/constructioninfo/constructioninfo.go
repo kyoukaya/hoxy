@@ -5,11 +5,13 @@ package constructioninfo
 
 import (
 	"fmt"
+
 	"github.com/kyoukaya/hoxy/defs"
 	"github.com/kyoukaya/hoxy/log"
 	"github.com/kyoukaya/hoxy/proxy"
 	"github.com/kyoukaya/hoxy/utils/dollinfo"
 	"github.com/kyoukaya/hoxy/utils/equipinfo"
+	"github.com/kyoukaya/hoxy/utils/fairyinfo"
 
 	"github.com/elazarl/goproxy"
 )
@@ -74,6 +76,7 @@ func init() {
 	initFunc := func(userCtx *proxy.UserCtx) ([]*proxy.PacketHook, proxy.ShutdownCb, error) {
 		dollinfo.Init()
 		equipinfo.Init()
+		fairyinfo.Init()
 		mod := &constructInfo{}
 		hooks := []*proxy.PacketHook{
 			proxy.NewPacketHook(modName, "SGun/developGun", 0, false, mod.handleGunConstruct),

@@ -4,11 +4,12 @@ package dollinfo
 
 import (
 	"encoding/json"
-	"github.com/kyoukaya/hoxy/log"
-	"github.com/kyoukaya/hoxy/utils"
 	"io/ioutil"
 	"os"
 	"sync"
+
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 
 	"github.com/mitchellh/mapstructure"
 )
