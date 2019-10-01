@@ -270,8 +270,15 @@ type SIndexIndex struct {
 		LastAdjust       string `json:"last_adjust"`
 	} `json:"equip_with_user_info"`
 	DevelopEquipActInfo map[int]struct {
-		Type       int `json:"type"`
-		EquipID    int `json:"equip_id"`
+		Type int `json:"type"`
+
+		// Fairy info
+		FairyID      int `json:"fairy_id"`
+		PassiveSkill int `json:"passive_skill"`
+		QualityLv    int `json:"quality_lv"`
+		// Equip info
+		EquipID int `json:"equip_id"`
+
 		BuildSlot  int `json:"build_slot"`
 		UserID     int `json:"user_id"`
 		StartTime  int `json:"start_time"`

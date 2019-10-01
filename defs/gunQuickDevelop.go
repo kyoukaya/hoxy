@@ -4,3 +4,5 @@ package defs
 type CGunQuickDevelop struct {
 	BuildSlot int `json:"build_slot"`
 }
+
+type SGunQuickDevelop int

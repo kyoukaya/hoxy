@@ -11,6 +11,11 @@ type CEquipDevelop struct {
 }
 
 type SEquipDevelop struct {
-	Type    int `json:"type"`
+	Type int `json:"type"`
+	// Fairy info
+	FairyID      int `json:"fairy_id"`
+	PassiveSkill int `json:"passive_skill"`
+	QualityLv    int `json:"quality_lv"`
+	// Equip info
 	EquipID int `json:"equip_id"`
 }

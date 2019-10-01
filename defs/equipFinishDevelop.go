@@ -32,4 +32,5 @@ type SEquipFinishDevelop struct {
 		IsLocked         string `json:"is_locked"`
 		LastAdjust       string `json:"last_adjust"`
 	} `json:"equip_with_user"`
+	FairyWithUser int `json:"fairy_with_user"`
 }
