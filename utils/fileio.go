@@ -1,8 +1,16 @@
+package utils
+
+import (
+	"bufio"
+	"io"
+	"os"
+)
+
 // read a file from specified location
-func readFileIntoList(fileloc string) []string {
+func ReadFileIntoList(fileloc string, delim byte) []string {
 	// open file from string and check for errors
 	fr, err := os.Open(fileloc)
-	utils.Check(err)
+	Check(err)
 
 	// create a new buffered reader
 	bufr := bufio.NewReader(fr)
@@ -12,28 +20,13 @@ func readFileIntoList(fileloc string) []string {
 	// loop counter
 	for {
 		// initialize buffers and read a line from a file in a loop
-		dat, err := bufr.ReadString('\n')
+		dat, err := bufr.ReadString(delim)
 		if err == io.EOF {
 			break
 		}
-		utils.Check(err)
-		list = append(list, string(dat))
-  }
+		Check(err)
+		list = append(list, dat)
+	}
 
-  return list
-}
-
-// read a file from specified location as []byte
-func readFileIntoByte(fileloc string) []byte {
-	// open file from string and check for errors
-	fr, err := os.Open(fileloc)
-	utils.Check(err)
-
-	// create a new buffered reader
-	bufr := bufio.NewReader(fr)
-
-	dat, err := bufr.ReadBytes(0)
-	utils.Check(err)
-
-	return dat
+	return list
 }
