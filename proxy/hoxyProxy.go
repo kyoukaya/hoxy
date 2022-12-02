@@ -1,8 +1,7 @@
 package proxy
 
 import (
-	"github.com/kyoukaya/hoxy/log"
-	"github.com/kyoukaya/hoxy/utils"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -10,6 +9,10 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/proxy/core/userauth"
+	"github.com/kyoukaya/hoxy/utils"
 
 	"github.com/elazarl/goproxy"
 )
@@ -42,7 +45,7 @@ type AuthHandler func(kind string, pkt interface{}, pktCtx *goproxy.ProxyCtx) (o
 
 // NewHoxy returns a new initialized HoxyProxy
 func NewHoxy(baseURL string, authHandler AuthHandler, filters Filters) *HoxyProxy {
-	utils.ParseFlags()
+	//utils.ParseFlags()
 	log.InitLogger(true, true, "")
 	// TODO: Init the standard logger based on flags.
 
@@ -81,6 +84,49 @@ func NewHoxy(baseURL string, authHandler AuthHandler, filters Filters) *HoxyProx
 	return hoxy
 }
 
+func NewHoxyfromFile(authHandler AuthHandler) *HoxyProxy {
+	//utils.ParseFlags()
+	log.InitLogger(true, true, "")
+	baseURL := utils.INIParsefromFile(utils.StringFlags("c"), "", "baseURL", "string").(string)
+	https := generateFilter(utils.INIParsefromFile(utils.StringFlags("c"), "blocklist", "HTTPSBlockList", "[]string").([]string))
+	telemetry := generateFilter(utils.INIParsefromFile(utils.StringFlags("c"), "blocklist", "TelemetryBlockList", "[]string").([]string))
+	nolog := generateFilter(utils.INIParsefromFile(utils.StringFlags("c"), "blocklist", "ELBlockList", "[]string").([]string))
+	server := goproxy.NewProxyHttpServer()
+	hoxy := &HoxyProxy{
+		mutex:           &sync.Mutex{},
+		authHandler:     authHandler,
+		baseURL:         baseURL,
+		httpsFilter:     https,
+		telemetryFilter: telemetry,
+		logFilter:       nolog,
+		server:          server,
+		shuttingDown:    false,
+		users:           make(map[string]*UserCtx),
+	}
+
+	server.OnRequest().DoFunc(hoxy.HandleReq)
+	server.OnResponse().DoFunc(hoxy.HandleResp)
+
+	if utils.BoolFlags("https") {
+		_, certStatErr := os.Stat(utils.PackageRoot + "/cert.pem")
+		_, keyStatErr := os.Stat(utils.PackageRoot + "/key.pem")
+		// Generate CA if it doesn't exist
+		if os.IsNotExist(certStatErr) || os.IsNotExist(keyStatErr) {
+			log.Infof("Generating CA...")
+			if err := utils.GenerateCA(); err != nil {
+				log.Fatal(err)
+			}
+			log.Infof("Copy and register the created 'cert.pem' with your client.")
+		}
+		if err := utils.LoadCA(); err != nil {
+			log.Fatal(err)
+		}
+		server.OnRequest().HandleConnect(goproxy.FuncHttpsHandler(hoxy.httpsPassthrough))
+	}
+
+	return hoxy
+}
+
 // LogGamePackets will log the op of any packet sent or received from the servers.
 // This is probably only useful for developers and is false by default.
 func (hoxy *HoxyProxy) LogGamePackets(b bool) {
@@ -88,7 +134,25 @@ func (hoxy *HoxyProxy) LogGamePackets(b bool) {
 }
 
 // Start starts the proxy. This is blocking and does not return.
-func (hoxy *HoxyProxy) Start() {
+func Start() {
+	utils.ParseFlags()
+	var hoxy *HoxyProxy
+
+	filters := Filters{
+		HTTPSFilter:     DefaultHTTPSFilter,
+		TelemetryFilter: DefaultTelemetryFilter,
+		LogFilter:       DefaultLogFilter,
+	}
+
+	if utils.StringFlags("c") == "" {
+		hoxy = NewHoxy(GlobalGameBaseURL, userauth.AuthHandler, filters)
+		fmt.Println("no")
+		hoxy.LogGamePackets(true)
+	} else {
+		hoxy = NewHoxyfromFile(userauth.AuthHandler)
+		hoxy.LogGamePackets(true)
+	}
+
 	sigs := make(chan os.Signal)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	// Catch sigint/sigterm and cleanly exit

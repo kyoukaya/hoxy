@@ -53,8 +53,12 @@ func ParseFlags() {
 	logVerbose := flag.Bool("hoxy-verbose", false, "log more Hoxy information")
 	addr := flag.String("addr", ":8080", "proxy listen address")
 	https := flag.Bool("https", false, "MITM https connections. Requires loading a CA")
+	floc := flag.String("c", "", "INI Config File location")
+
 	flag.Parse()
+
 	stringFlags["addr"] = *addr
+	stringFlags["c"] = *floc
 	boolFlags["v"] = *verbose
 	boolFlags["hoxy-verbose"] = *logVerbose
 	boolFlags["https"] = *https
