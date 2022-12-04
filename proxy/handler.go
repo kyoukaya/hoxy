@@ -2,12 +2,13 @@ package proxy
 
 import (
 	"bytes"
-	"github.com/kyoukaya/hoxy/log"
-	"github.com/kyoukaya/hoxy/utils"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/kyoukaya/hoxy/log"
+	"github.com/kyoukaya/hoxy/utils"
 
 	"github.com/elazarl/goproxy"
 )
@@ -39,13 +40,13 @@ func (hoxy *HoxyProxy) HandleReq(req *http.Request, ctx *goproxy.ProxyCtx) (*htt
 		return req, goproxy.NewResponse(req, goproxy.ContentTypeText, http.StatusOK, "")
 	}
 	reqURL := req.URL.String()
-	body, err := ioutil.ReadAll(req.Body)
+	body, err := io.ReadAll(req.Body)
 	utils.Check(err)
 	// Reading from the body consumes all the bytes, so we need to save back a copy.
-	req.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	req.Body = io.NopCloser(bytes.NewBuffer(body))
 	// TODO: Parsing wrecks the request body damnit! There should be a better way of parsing http forms.
 	req.ParseForm()
-	req.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	req.Body = io.NopCloser(bytes.NewBuffer(body))
 	// Handle game traffic
 	if strings.HasPrefix(req.URL.String(), hoxy.baseURL) {
 		return hoxy.dispatchReq(req, ctx)
@@ -85,10 +86,10 @@ func (hoxy *HoxyProxy) HandleResp(resp *http.Response, ctx *goproxy.ProxyCtx) *h
 		return resp
 	}
 	reqURL := ctx.Req.URL.String()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	utils.Check(err)
 	// Reading from the body consumes all the bytes, so we need to save back a copy.
-	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	resp.Body = io.NopCloser(bytes.NewBuffer(body))
 	// Game traffic
 	if strings.HasPrefix(reqURL, hoxy.baseURL) {
 		return hoxy.dispatchRes(body, resp, ctx)

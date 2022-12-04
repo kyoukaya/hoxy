@@ -1,0 +1,26 @@
+[General] # general initialization stuff
+BaseURL = "http://gf-game.sunborngame.com/index.php/1001/"
+
+[Lists.HTTPS]
+FromFile = false  # load list from a file rather than using an INI-key if true
+FileLoc = "/path/to/file"  # file location for HTTPSLists
+List = "appguard\\.com\\.cn"
+
+[Lists.Telemetry]
+FromFile = false  # load list from a file rather than using an INI-key if true
+FileLoc = "/path/to/file"  # file location for Lists
+List = "graph\\.facebook\\.com appsflyer\\.com sessions\\.bugsnag\\.com cloud\\.unity3d\\.com rayjump\\.com duapps\\.com spykemedia\\.g2afse\\.com ldmnq\\.com erntech\\.net st\\.frecorp\\.net apitask\\.doglobal\\.net baidu\\.clickurl\\.to"
+
+[Lists.ExcludeLog]
+FromFile = false  # load list from a file rather than using an INI-key if true
+FileLoc = "/path/to/file"  # file location for ExcludeLog
+List = "gf-transit\\.sunborngame\\.com track-us\\.sunborngame\\.com dkn3dfwjnmzcj\\.cloudfront\\.net/image/ImageConfig gf-dc\\.sunborngame\\.com s3.us-east-2\\.amazonaws\\.com:443/gf1-file-server/ cs30\\.net google gstatic"
+
+#[mods]
+# possibly used modes here
+# the key for new mods will have to be added to the parser
+# most likely a struct holding INI-key names and optional config sections used as on/off switches and the mods they bind to
+
+#[<mod name>-config]  # or separate config file handled by modules
+# optional mod configuration
+# option keys will either reside in the same struct used to list mods and their keys or in a separate struct

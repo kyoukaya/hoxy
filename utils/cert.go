@@ -3,7 +3,7 @@ package utils
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/elazarl/goproxy"
@@ -28,11 +28,11 @@ func LoadCA() error {
 	}
 	defer keyFile.Close()
 
-	caCert, err := ioutil.ReadAll(certFile)
+	caCert, err := io.ReadAll(certFile)
 	if err != nil {
 		return err
 	}
-	caKey, err := ioutil.ReadAll(keyFile)
+	caKey, err := io.ReadAll(keyFile)
 	if err != nil {
 		return err
 	}

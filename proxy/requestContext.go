@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/elazarl/goproxy"
 )
@@ -28,7 +28,7 @@ type DispatchContext struct {
 func GetDispatchContext(ctx *goproxy.ProxyCtx) *DispatchContext {
 	reqCtx, ok := ctx.UserData.(*DispatchContext)
 	if reqCtx == nil || !ok {
-		panic(fmt.Sprintf("Failed to cast ctx.UserData into *RequestContext"))
+		panic(errors.New("failed to cast ctx.UserData into *RequestContext"))
 	}
 	return reqCtx
 }
