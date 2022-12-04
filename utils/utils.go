@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"path"
 	"runtime"
+	"strings"
 )
 
 var PackageRoot = func() string {
@@ -53,8 +54,12 @@ func ParseFlags() {
 	logVerbose := flag.Bool("hoxy-verbose", false, "log more Hoxy information")
 	addr := flag.String("addr", ":8080", "proxy listen address")
 	https := flag.Bool("https", false, "MITM https connections. Requires loading a CA")
+	config := flag.String("c", "", "Path of TOML config file")
+
 	flag.Parse()
+
 	stringFlags["addr"] = *addr
+	stringFlags["config"] = *config
 	boolFlags["v"] = *verbose
 	boolFlags["hoxy-verbose"] = *logVerbose
 	boolFlags["https"] = *https
@@ -69,4 +74,27 @@ func GetOutboundIP() string {
 	defer conn.Close()
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 	return localAddr.IP.String()
+}
+
+// Convert a String into an Array with a delimiter
+func StringToArray(dat string, delim string) []string {
+	// []string to be returned
+	var ret []string
+	// counter for ret
+	var o = 0
+
+	// main loop
+	for {
+		bef, aft, f := strings.Cut(dat, delim)
+		if !f {
+			ret = append(ret, bef)
+			break
+		}
+
+		ret = append(ret, bef)
+		o++
+		dat = aft
+	}
+
+	return ret
 }
