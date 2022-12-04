@@ -86,7 +86,7 @@ func newHoxy(baseURL string, authHandler AuthHandler, filters Filters) *HoxyProx
 }
 
 // Generate new HoxyProxy from TOML Config file
-func newHoxyfromTOML(floc string) *HoxyProxy {
+func newHoxyfromTOML(floc string, authHandler AuthHandler) *HoxyProxy {
 	log.InitLogger(true, true, "")
 	// TODO: Init the standard logger based on flags.
 
@@ -98,7 +98,7 @@ func newHoxyfromTOML(floc string) *HoxyProxy {
 
 	hoxy := &HoxyProxy{
 		mutex:           &sync.Mutex{},
-		authHandler:     userauth.AuthHandler,
+		authHandler:     authHandler,
 		baseURL:         dat.General.BaseURL,
 		server:          server,
 		shuttingDown:    false,
@@ -138,7 +138,7 @@ func (hoxy *HoxyProxy) LogGamePackets(b bool) {
 }
 
 // Start starts the proxy. This is blocking and does not return.
-func Start() {
+func Start(authHandler AuthHandler) {
 	utils.ParseFlags()
 	var hoxy *HoxyProxy
 	if utils.StringFlags("config") == "" {
@@ -148,11 +148,13 @@ func Start() {
 			LogFilter:       DefaultLogFilter,
 		}
 		hoxy = newHoxy(GlobalGameBaseURL, userauth.AuthHandler, filters)
+
 		log.Infof("Telemetry Filter: %s", hoxy.telemetryFilter)
 		log.Infof("HTTPS Filter: %s", hoxy.httpsFilter)
 		log.Infof("Exclude from Log: %s", hoxy.logFilter)
 	} else {
-		hoxy = newHoxyfromTOML(utils.StringFlags("config"))
+		hoxy = newHoxyfromTOML(utils.StringFlags("config"), authHandler)
+
 		log.Infof("Telemetry Filter: %s", hoxy.telemetryFilter)
 		log.Infof("HTTPS Filter: %s", hoxy.httpsFilter)
 		log.Infof("Exclude from Log: %s", hoxy.logFilter)
